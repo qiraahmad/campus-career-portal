@@ -12,11 +12,11 @@ app = Flask(__name__)
 # the associated function.
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("admin_signin.html")
 
 @app.route('/campus_career_portal')
 def main():
-    return render_template("admin_signin.html")
+    return render_template("index.html")
 
 @app.route('/learn_more')
 def learn_more():
