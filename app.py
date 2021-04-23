@@ -12,15 +12,15 @@ app = Flask(__name__)
 # the associated function.
 @app.route('/')
 def index():
-    return render_template("admin_signin.html")
-
-@app.route('/campus_career_portal')
-def main():
-    return render_template("index.html")
+    return render_template("sign_in.html")
 
 @app.route('/learn_more')
 def learn_more():
     return render_template("learn_more.html")
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template("user_dashboard.html")
   
 # main driver function
 if __name__ == '__main__':
