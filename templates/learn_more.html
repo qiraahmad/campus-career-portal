@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Page Information -->
+    <meta name="author" content="Anderson Anizio">
+    <meta name="copyright" content="" />
+    <meta name="description" content="Landing Page Flexbox Template">
+    <meta name="keywords" content="">
+    <title>Campus Career Portal</title>
+
+    <!-- Page Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.min.css') }}" />
+    <script
+    src="https://kit.fontawesome.com/64d58efce2.js"
+    crossorigin="anonymous"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+</head>
+<body>
+    <header class="main-header">
+    <div class="main-header-bg" style="background-image: url('/static/mainbg.svg'); background-size: 600px 1000px; background-repeat:no-repeat;"></div>
+        <div class="main-container main-header-wrapper">
+            <div class="main-header-top">
+                <h1 class="logo"><a href="/">Campus Career Portal</a></h1>
+                <nav class="main-menu">
+                    <a href="#">Home</a>
+                    <a href="#work">Employers</a>
+                    <a href="#services">Students</a>
+                    <a href="#testimonials">Recruiters</a>
+                </nav>
+            </div>
+
+            <div class="hero">
+                <h2>Campus Career Portal</h2>
+                <h3>Your Placement Solution</h3>
+            </div>
+        </div>
+    </header>
+
+    <!-- Employer Section -->
+    <section id="work" class="work section">
+        <div class="main-container">
+            <h2 class="section-title">Some Of Our Work</h2>
+            <p class="section-desc">Aliquip veniam irure est nisi officia ad exercitation. Reprehenderit pariatur enim dolore aliquip non aliquip nulla duis aliqua est cillum sit adipisicing.</p>
+            <hr class="section-divider">
+
+            <div class="gallery" style="margin:10%">
+                <div class="gallery__row">
+                    <div class="gallery__item gallery__item--small" style="background-size: 300px 600px; background-repeat:no-repeat; background-image: url(/static/job.svg); background-color: aliceblue;" ></div>
+                    <div class="gallery__item gallery__item--small" style="background-size: 400px 600px; background-repeat:no-repeat; background-image: url(/static/work.svg); background-color: aliceblue;" ></div>
+                </div>
+                <div class="gallery__row">
+                    <div class="gallery__item gallery__item--small" style="background-size: 400px 600px; background-repeat:no-repeat; background-image: url(/static/offer.svg); background-color: aliceblue;" ></div>
+                    <div class="gallery__item gallery__item--small" style="background-size: 400px 600px; background-repeat:no-repeat; background-image: url(/static/interview.svg); background-color: aliceblue;" ></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Students Section -->
+    <section id="services" class="services section section-state--odd">
+        <div class="main-container">
+            <h2 class="section-title">Features and Services</h2>
+            <p class="section-desc">Aliquip veniam irure est nisi officia ad exercitation. Reprehenderit pariatur enim dolore aliquip non aliquip nulla duis aliqua est cillum sit adipisicing.</p>
+            <hr class="section-divider">
+
+            <div class="grid">
+                <div class="grid__item">
+                    <i class="fas fa-camera-retro"></i>
+                    <h4>Photography</h4>
+                    <p>Minim reprehenderit dolor tempor excepteur sunt officia laboris magna sunt aliquip labore.</p>
+                </div>
+                <div class="grid__item">
+                    <i class="fas fa-briefcase"></i>
+                    <h4>Web Development</h4>
+                    <p>Sint reprehenderit pariatur nisi cupidatat eu exercitation aute nisi ex duis tempor esse irure esse.</p>
+                </div>
+                <div class="grid__item">
+                    <i class="fas fa-edit"></i>
+                    <h4>Content Editing</h4>
+                    <p>Ullamco fugiat ea nostrud duis ea quis excepteur ullamco adipisicing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recruiters Section -->
+    <section id="testimonials" class="testimonials section">
+        <div class="main-container">
+            <h2 class="section-title">What Others Say</h2>
+            <blockquote class="testimonial">
+                <p class="testimonial__quote">Dolore in ex consequat minim deserunt laboris adipisicing ea sit ipsum laboris adipisicing excepteur.</p>
+                <cite class="testimonial__author">— Jane Doe</cite>
+            </blockquote>
+            <blockquote class="testimonial">
+                <p class="testimonial__quote">Consectetur ad aliquip tempor sint dolore commodo ex duis. Ipsum nulla irure et tempor consectetur cupidatat dolor nulla ea labore mollit quis eu ad.</p>
+                <cite class="testimonial__author">— John Doe</cite>
+            </blockquote>
+            <blockquote class="testimonial">
+                <p class="testimonial__quote">Mollit fugiat consequat elit sit dolore mollit ea dolore esse laboris.</p>
+                <cite class="testimonial__author">— John Doe</cite>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section id="newsletter" class="newsletter section section-state--odd">
+        <div class="main-container">
+            <h2 class="section-title">Join Our Newsletter</h2>
+            <p class="section-desc">Aliquip veniam irure est nisi officia ad exercitation. Reprehenderit pariatur enim dolore aliquip non aliquip nulla duis aliqua est cillum sit adipisicing.</p>
+            <hr class="section-divider">
+
+            <form action="#" class="newsletter__form">
+                <input type="email" placeholder="Your best email">
+                <input type="submit" class="btn-primary" value="Subscribe Now">
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="main-container">
+            <div class="social-networks">
+                <a href="#" title="Twitter"><i class="fab fa-twitter-square"></i></a>
+                <a href="#" title="Facebook"><i class="fab fa-facebook-square"></i></a>
+                <a href="#" title="GitHub"><i class="fab fa-github-square"></i></a>
+                <a href="#" title="Medium"><i class="fab fa-medium"></i></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
