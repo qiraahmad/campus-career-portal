@@ -18,9 +18,17 @@ def index():
 def learn_more():
     return render_template("learn_more.html")
 
-@app.route('/dashboard')
-def dashboard():
-    return render_template("user_dashboard.html")
+@app.route('/cso_dashboard')
+def cso_dashboard():
+    return render_template("cso_dashboard.html")
+
+@app.route('/student_dashboard')
+def student_dashboard():
+    return render_template("student_dashboard.html")
+
+@app.route('/recruiter_dashboard')
+def recruiter_dashboard():
+    return render_template("recruiter_dashboard.html")
   
 # main driver function
 if __name__ == '__main__':
