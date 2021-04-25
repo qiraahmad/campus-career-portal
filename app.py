@@ -42,7 +42,6 @@ def view_job_details_dashboard():
 @app.route('/apply_now_form_student')
 def apply_now_form_student():
     return render_template("apply_now_form_student.html")
-#changes here
 
 # main driver function
 if __name__ == '__main__':
