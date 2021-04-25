@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
+</head>
+
+<style>
+
+
+    .sidebar-menu ul ul li a {
+      color: white;
+      padding-left: 25px;
+    }
+    
+    .sidebar-menu ul ul li {
+       margin-bottom: 2%;
+       width: 200px
+    }
+    
+    .sidebar-menu ul ul {
+    display: none
+    }
+    
+    .sidebar-menu li:hover > ul {
+            display: block;
+                    
+    }
+    
+    /* On mouse-over */
+    .sidebar-menu li a:hover, .user-btn:hover {
+      text-decoration: underline;
+    }
+    
+    
+    .user-btn:hover + .hidden {
+      display: block;
+    }
+    
