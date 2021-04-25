@@ -42,6 +42,14 @@ def view_job_details_dashboard():
 def apply_now_form_student():
     return render_template("apply_now_form_student.html")
 
+@app.route('/approve_posting')
+def approve_posting():
+    return render_template("approve_posting.html")
+
+@app.route('/job_approval_response')
+def job_approval_response():
+    return render_template("job_approval_response.html")
+
 # main driver function
 if __name__ == '__main__':
   
