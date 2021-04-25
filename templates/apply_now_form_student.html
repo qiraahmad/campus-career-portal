@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
+</head>
+
+<style>
+
+
+.sidebar-menu ul ul li a {
+  color: white;
+  padding-left: 25px;
+}
+
+.sidebar-menu ul ul li {
+   margin-bottom: 2%;
+   width: 200px
+}
+
+.sidebar-menu ul ul {
+display: none
+}
+
+.sidebar-menu li:hover > ul {
+        display: block;
+                
+}
+
+/* On mouse-over */
+.sidebar-menu li a:hover, .user-btn:hover {
+  text-decoration: underline;
+}
+
+
+.user-btn:hover + .hidden {
+  display: block;
+}
+
+
+.h5-job-description
+{
+    font-weight: 500;
+    word-spacing: 10px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.submit-application-button
+{
+    font-size: 16px;
+    color: white;
+    background-color: rgb(68,129,235);
+    border-radius: 3px;
+    border:none;
+    
+    width: fit-content;
+    padding: 5px 5px;
+    align-content: center;
+    cursor: pointer;
+}
+
+
+.div-job-details
+{
+    background-color: white;
+    border:2px yellow solid;
+    border-radius: 8px;
+    padding: 15px 15px;
+    font-weight: 100;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    width: 900px;
+    
+}
+
+.job-date-list
+{
+    font-size: 16px;
+    color: black;
+    background-color:white;
+    box-shadow: thistle;
+    border-radius: 3px;
+    height: 32px;
+    border:none;
+    border-radius: 4px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.apply-now-job-button
+{
+   
+    font-size: 16px;
+    color: white;
+    background-color: rgb(68,129,235);
+    border-radius: 3px;
+    border:none;
+    
+    width: fit-content;
+    padding: 5px 5px;
+    align-content: center;
+    cursor: pointer;
+    position:absolute;
+    right: 0;
+    margin-right: 400px;
+    margin-top: 20px;
+    
+
+}
+
+.h4-hob-details
+{
+    font-weight: 500;
+}
+.activity-grid
+{
+    border: 2px black solid;
+    padding: 5px 5px;
+    
+}
+
+.div-about-company
+{
+    border: 2px pink solid;
+    margin-right: 100px;
+    position: absolute;
+    right: 0;
+}
+
+</style>
+
+<body>
+    
+    <input type="checkbox" id="sidebar-toggle">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3 class="brand">
+                <span class="ti-unlink"></span> 
+                <span style="font-family: Quicksand, sans-serif; font-size: 12px;">Campus Career Portal</span>
+            </h3> 
+            <label for="sidebar-toggle" class="ti-menu-alt"></label>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="">
+                        <span class="ti-home"></span>
+                        <span>Home</span>
+                    </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-calendar"></span>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="user-btn">
+                        <span class="ti-id-badge"></span>
+                        <span>Jobs<span class="ti-arrow-down"></span></span>
+                    </a>
+
+                    <ul id="user-show">
+                        <li>
+                            <a href="">
+                                <span class="ti-archive"></span>
+                                <span class="text">Jobs Applied For</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <span class="ti-bolt-alt"></span>
+                                <span class="text">Active Jobs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="">
+                        <span class="ti-bar-chart-alt"></span>
+                        <span>Reports</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-search"></span>
+                        <span>Search Jobs</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-settings"></span>
+                        <span>Account Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    <div class="main-content">
+        
+        <header>
+            <div class="search-wrapper">
+                <span class="ti-search"></span>
+                <input type="search" placeholder="Search">
+            </div>
+            
+            <div class="social-icons">
+                <span class="ti-bell"></span>
+                <span class="ti-comment"></span>
+                <div></div>
+            </div>
+        </header>
+        
+        <main>
+            
+            <h2 class="dash-title">Application Form</h2>
+            
+           
+
+                
+
+            <section class="recent">
+                <div class="activity-grid" style="font-size: 14px;">
+                    <form>
+                        
+                        <table cellpadding="5" cellspacing="0">
+                        <tr> <td style="width: 50%">
+                        <label for="First_Name"><b>First name *</b></label><br />
+                        <input name="First_Name" type="text" maxlength="50" style="width:100%;max-width: 260px" />
+                        </td> <td style="width: 50%">
+
+                        <label for="Last_Name"><b>Last name *</b></label><br />
+                        <input name="Last_Name" type="text" maxlength="50" style="width:100%;max-width: 260px" />
+                        </td> </tr> <tr> <td colspan="2">
+
+                        <label for="rollnumber"><b>Roll No. (e.g. L174651) *</b></label><br />
+                        <input name="rollnumber" type="text" maxlength="50" style="width:100%;max-width: 260px" />
+                        </td> </tr> <tr> <td colspan="2">
+
+
+                        </td> </tr> <tr> <td>
+
+                            <label for="batch"><b>Batch:</b></label><br /> <input name="batch" type="text" maxlength="50" style="width:100%;max-width: 260px" /> </td> <td>
+                            
+                            <label for="Program:"><b>Program</b></label><br />
+                            <input name="program" type="text" maxlength="50" style="width:100%;max-width: 260px" />
+                            </td> </tr> <tr> <td>
+
+                            
+
+                            
+
+                        <label for="Email_Address"><b>Email *</b></label><br />
+                        <input name="Email_Address" type="text" maxlength="100" style="width:100%;max-width: 535px" />
+                        </td> </tr> <tr> <td colspan="2">
+                            
+                        <label for="Portfolio"><b>Linkedin Profile:*</b></label><br />
+                        <input name="Portfolio" type="text" maxlength="255" value="www.linkedin.com/in/" style="width:100%;max-width: 535px" />
+                        </td> </tr> <tr> <td colspan="2">
+
+                        <label for="Position"><b>Position you are applying for *</b></label><br />
+                       
+                
+                        <select class="job-date-list" name="job-date-list" id="jobs-dates" >
+                            <option value="disabled selected">Position</option>
+                            <option value="last-24">Intern</option>
+                            
+                            
+                        </select>
+                            
+        
+                        
+                        </td> </tr> <tr> <td>
+
+                        <label for="CGPA"><b>CGPA</b></label><br /> <input name="CGPA" type="text" maxlength="50" style="width:100%;max-width: 260px" /> </td> <td>
+                        
+                        <label for="StartDate"><b>When can you start?</b></label><br />
+                        <input name="StartDate" type="text" maxlength="50" style="width:100%;max-width: 260px" />
+                        </td> </tr> <tr> <td>
+                        
+                        <label for="Phone"><b>Phone *</b></label><br />
+                        <input name="Phone" type="text" maxlength="50" style="width:100%;max-width: 260px" />
+                        </td> <td>
+                       
+                        
+                        <label for="Organization"><b>Last company you worked for</b></label><br />
+                        <input name="Organization" type="text" maxlength="100" style="width:100%;max-width: 535px" />
+                        </td> </tr> <tr> <td colspan="2">
+                        <label for="Reference"><b>Reference / Comments / Questions</b></label><br />
+                        <textarea name="Reference" rows="7" cols="40" style="width:100%;max-width: 535px"></textarea>
+                        </td> </tr> <tr> <td colspan="2" style="text-align: center;">
+                        
+                        
+                        <button class="submit-application-button">Submit</button>
+                        </td> </tr>
+                        </table>
+                        </form>
+                    
+                    </div>
+                    
+                   
+                    
+                </div>
+            </section>
+
+               
+           
+        </main>
+        
+    </div>
+    
+</body>
+
+</html>

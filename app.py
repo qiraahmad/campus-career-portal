@@ -30,6 +30,20 @@ def student_dashboard():
 def recruiter_dashboard():
     return render_template("recruiter_dashboard.html")
   
+@app.route('/student_search_job')
+def search_job_student_dashboard():
+    return render_template("search_job_student.html")
+
+
+@app.route('/view-job-details-student')
+def view_job_details_dashboard():
+    return render_template("view-job-details-student.html")
+
+@app.route('/apply_now_form_student')
+def apply_now_form_student():
+    return render_template("apply_now_form_student.html")
+#changes here
+
 # main driver function
 if __name__ == '__main__':
   
