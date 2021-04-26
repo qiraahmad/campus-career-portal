@@ -54,9 +54,20 @@ def job_approval_response():
 def employer_search_students_response():
     return render_template("employer_search_students.html")
 
+<<<<<<< HEAD
 @app.route('/apply_student_filter')
 def search_students_filter():
     return render_template("search_students_filter.html")
+=======
+@app.route('/upload_data_CSO')
+def upload_data_CSO():
+    return render_template("upload_data_CSO.html")
+
+
+@app.route('/view_uploaded_students_CSO')
+def view_uploaded_students_CSO():
+    return render_template("view_uploaded_students_CSO.html")
+>>>>>>> 6ad92ca0b3df6787d3ad1d4df004bbcdb5ab6962
 
 
 # main driver function
