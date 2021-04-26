@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-    <title>Student Dashboard</title>
+    <title>Search Students</title>
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
@@ -56,16 +56,15 @@ display: none
 }
 .job-title-list
 {
-    font-size: 16px;
+    font-size: 14px;
     color: black;
     background-color:white;
     box-shadow: thistle;
-    border-radius: 3px;
     height: 32px;
     border:none;
-    border-radius: 4px;
     align-items: center;
     cursor: pointer;
+    padding-right: 5px;
 }
 .job-date-list
 {
@@ -120,7 +119,6 @@ display: none
 }
 
 
-
 </style>
 
 <body>
@@ -146,6 +144,13 @@ display: none
                 </li>
 
                 <li>
+                    <a href="" class="user-btn">
+                        <span class="ti-clipboard"></span>
+                        <span>Applications</span>
+                    </a>
+
+                </li>
+                <li>
                     <a href="">
                         <span class="ti-calendar"></span>
                         <span>Calendar</span>
@@ -160,8 +165,14 @@ display: none
                     <ul id="user-show">
                         <li>
                             <a href="">
+                                <span class="ti-pencil-alt"></span>
+                                <span class="text">Submit Job to CSO</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
                                 <span class="ti-archive"></span>
-                                <span class="text">Jobs Applied For</span>
+                                <span class="text">Your Jobs</span>
                             </a>
                         </li>
                         <li>
@@ -182,7 +193,7 @@ display: none
                 <li>
                     <a href="">
                         <span class="ti-search"></span>
-                        <span>Search Jobs</span>
+                        <span>Search Students</span>
                     </a>
                 </li>
 
@@ -214,12 +225,13 @@ display: none
         
         <main>
 
-            <div class="job-type-div">
+            <div class="job-type-div" style="margin:0">
+                <span style="color: rgb(68,129,235);"> Filters Applied </span>
 
                 <form action="/action_page.php">
                    
                     <select class="job-title-list" name="job-title-list" id="jobs-titles" >
-                      <option value="disabled selected">Job Title</option>
+                      <option value="disabled selected">School Year</option>
                       <option value="web-php-developer">Web PHP developer</option>
                       <option value="react-native-intern">React Native Intern</option>
                       <option value="wordpress-php-deveoper">Wordpress/PHP Developer</option>
@@ -280,14 +292,11 @@ display: none
                                 <thead>
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Position</th>
+                                        <th>Current Position</th>
                                         <th>Skills</th>
                                         <th>Degree</th>
                                         <th>Status</th>
-                                        <th>Applied On</th>
-                                        
-                                        <th>View Details</th>
-                                        <th>Apply</th>
+                                        <th>Contact</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -302,13 +311,12 @@ display: none
                         
                                         <td>Computer Science</td>
                                         <td>Graduated</td>
-                                        <td>29 April, 2021</td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Contact/View Profile</span>
+                                        </td>
                                      
                                         </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span> </td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
-                                        </td>
+
                                     </tr>
                                     <tr>
                                         <td>Fred Davis</td>
@@ -320,13 +328,12 @@ display: none
                                              </div>
                                         <td>Computer Science</td>
                                         <td>Undergrad </td>
-                                        <td>23 April, 2021</td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Contact/View Profile</span>
+                                        </td>
                                         
                                         </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
-                                        </td>
+ 
                                     </tr>
                                     <tr>
                                         <td>Adnan Jamshed</td>
@@ -339,12 +346,11 @@ display: none
                         
                                         <td>Computer Science</td>
                                         <td>Graduated </td>
-                                        <td>19 April, 2021</td>
-                                    
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
                                         <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Contact/View Profile</span>
                                         </td>
+                                    
+
                                     </tr>
                                     <tr>
                                         <td>Kiran Khan</td>
@@ -358,13 +364,12 @@ display: none
                         
                                         <td>Computer Science</td>
                                         <td>Undergrad </td>
-                                        <td>18 April, 2021</td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Contact/View Profile</span>
+                                        </td>
                                      
                                         </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
-                                        </td>
+
                                     </tr>
                                     <tr>
                                         <td>Abdul Rehman</td>
@@ -379,13 +384,12 @@ display: none
                         
                                     <td>Computer Science</td>
                                     <td>Graduated/Masters </td>
-                                    <td>17 April, 2021</td>
+                                    <td>
+                                        <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Contact/View Profile</span>
+                                    </td>
                                      
                                         </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
-                                        </td>
+
                                     </tr>
                                     <tr>
                                         <td>Naveed Shaahid</td>
@@ -398,14 +402,13 @@ display: none
                                              </div>
                                         <td>Computer Science</td>
                                         <td>Graduated/Masters </td>
-                                        <td>10 April, 2021</td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Contact/View Profile</span>
+                                        </td>
         
                                      
                                         </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
-                                        </td>
+
                                     </tr>
                                     <tr>
                                         <td>Randy Miller</td>
@@ -417,17 +420,15 @@ display: none
                                              </div>
                                         <td>Computer Science</td>
                                         <td>Graduated/Masters </td>
-                                        <td>25 March, 2021</td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Contact/View Profile</span>
+                                        </td>
                                     
                                      
                                         </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
-                                        </td>
-                                    </tr>
-                                    
 
+                                    </tr>
+                                
   
                                     
                                 </tbody>

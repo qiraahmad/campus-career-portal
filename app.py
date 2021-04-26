@@ -54,6 +54,10 @@ def job_approval_response():
 def employer_search_students_response():
     return render_template("employer_search_students.html")
 
+@app.route('/apply_student_filter')
+def search_students_filter():
+    return render_template("search_students_filter.html")
+
 
 # main driver function
 if __name__ == '__main__':
