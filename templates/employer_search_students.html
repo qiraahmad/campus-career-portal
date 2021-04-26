@@ -12,32 +12,433 @@
 <style>
 
 
-    .sidebar-menu ul ul li a {
-      color: white;
-      padding-left: 25px;
-    }
+.sidebar-menu ul ul li a {
+  color: white;
+  padding-left: 25px;
+}
+
+.sidebar-menu ul ul li {
+   margin-bottom: 2%;
+   width: 200px
+}
+
+.sidebar-menu ul ul {
+display: none
+}
+
+.sidebar-menu li:hover > ul {
+        display: block;
+                
+}
+
+/* On mouse-over */
+.sidebar-menu li a:hover, .user-btn:hover {
+  text-decoration: underline;
+}
+
+
+.user-btn:hover + .hidden {
+  display: block;
+}
+
+.job-type-list
+{
+    font-size: 16px;
+    color: black;
+    background-color: white;
+    border-radius: 4px;
+    border:none;
+    height: 32px;
+    align-items: center;
+    box-shadow: thistle;
+    cursor: pointer;
     
-    .sidebar-menu ul ul li {
-       margin-bottom: 2%;
-       width: 200px
-    }
+}
+.job-title-list
+{
+    font-size: 16px;
+    color: black;
+    background-color:white;
+    box-shadow: thistle;
+    border-radius: 3px;
+    height: 32px;
+    border:none;
+    border-radius: 4px;
+    align-items: center;
+    cursor: pointer;
+}
+.job-date-list
+{
+    font-size: 16px;
+    color: black;
+    background-color:white;
+    box-shadow: thistle;
+    border-radius: 3px;
+    height: 32px;
+    border:none;
+    border-radius: 4px;
+    align-items: center;
+    cursor: pointer;
+}
+.job-location-list
+{
+    font-size: 16px;
+    color: black;
+    background-color:white;
+    box-shadow: thistle;
+    border-radius: 3px;
+    height: 32px;
+    border:none;
+    border-radius: 4px;
+    align-items: center;
+    cursor: pointer;
+}
+.job-type-div
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    border: 2px solid black;
+    align-items:baseline;
+    border:none;
+    border-radius: 3px;
     
-    .sidebar-menu ul ul {
-    display: none
-    }
+}
+
+.search-job-button
+{
+    font-size: 16px;
+    color: white;
+    background-color: rgb(68,129,235);
+    border-radius: 3px;
+    border:none;
     
-    .sidebar-menu li:hover > ul {
-            display: block;
+    width: fit-content;
+    padding: 5px 5px;
+    align-content: center;
+    cursor: pointer;
+}
+
+
+
+</style>
+
+<body>
+    
+    <input type="checkbox" id="sidebar-toggle">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3 class="brand">
+                <span class="ti-unlink"></span> 
+                <span style="font-family: Quicksand, sans-serif; font-size: 12px;">Campus Career Portal</span>
+            </h3> 
+            <label for="sidebar-toggle" class="ti-menu-alt"></label>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="">
+                        <span class="ti-home"></span>
+                        <span>Home</span>
+                    </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-calendar"></span>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="user-btn">
+                        <span class="ti-id-badge"></span>
+                        <span>Jobs<span class="ti-arrow-down"></span></span>
+                    </a>
+
+                    <ul id="user-show">
+                        <li>
+                            <a href="">
+                                <span class="ti-archive"></span>
+                                <span class="text">Jobs Applied For</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <span class="ti-bolt-alt"></span>
+                                <span class="text">Active Jobs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="">
+                        <span class="ti-bar-chart-alt"></span>
+                        <span>Reports</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-search"></span>
+                        <span>Search Jobs</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-settings"></span>
+                        <span>Account Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    <div class="main-content">
+        
+        <header>
+            <div class="search-wrapper">
+                <span class="ti-search"></span>
+                <input type="search" placeholder="Web PHP Developer">
+            </div>
+            
+            <div class="social-icons">
+                <span class="ti-bell"></span>
+                <span class="ti-comment"></span>
+                <div></div>
+            </div>
+        </header>
+        
+        <main>
+
+            <div class="job-type-div">
+
+                <form action="/action_page.php">
+                   
+                    <select class="job-title-list" name="job-title-list" id="jobs-titles" >
+                      <option value="disabled selected">Job Title</option>
+                      <option value="web-php-developer">Web PHP developer</option>
+                      <option value="react-native-intern">React Native Intern</option>
+                      <option value="wordpress-php-deveoper">Wordpress/PHP Developer</option>
+                      <option value="junior-web-developer">Junior Web Developer</option>
+                      <option value="all">All</option>
+                    </select>
                     
-    }
+
+                </form>
+                <form action="/action_page.php">
+                   
+                    <select class="job-type-list" name="job-type-list" id="jobs-date" >
+                      <option value="disabled selected">Job Date Posted</option>
+                      <option value="internship">23 March, 21</option>
+                      <option value="paid">22 April, 21</option>
+                      <option value="contract">23 April, 21</option>
+                      <option value="all">All</option>
+                    </select>
+                    <br><br>
+
+                </form>
+
+   
+
+                <form action="/action_page.php">
+                   
+                    <select class="job-location-list" name="job-location-list" id="jobs-loaction" >
+                      <option value="disabled selected">Location</option>
+                      <option value="last-24">Exact location only</option>
+                      <option value="last-24">Remote location</option>
+                      <option value="last-3-days">within 5 kilometers</option>
+                      <option value="last-7-days">within 10 kilometers</option>
+                      <option value="last-7-days">within 15 kilometers</option>
+                      <option value="last-7-days">within 25 kilometers</option>
+                      <option value="last-7-days">within 50 kilometers</option>
+                      <option value="last-14-days">All</option>
+                      
+                    </select>
+                    
+
+                </form>
+
+                <button class=search-job-button> Apply</button>
+
+                
+
+            </div>
+            
+            <h2 class="dash-title"> 7 students found for <span style="color: rgb(68,129,235);"> Web PHP Developer</span></h2>
+            
+            <section class="recent">
+                <div class="search-results-grid">
+                    <div class="activity-card" style="height:95% !important">
+                        <h3>Search Results</h3>
+                        
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Position</th>
+                                        <th>Skills</th>
+                                        <th>Degree</th>
+                                        <th>Status</th>
+                                        <th>Applied On</th>
+                                        
+                                        <th>View Details</th>
+                                        <th>Apply</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Andrew Simons</td>
+                                        <td>Internship</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
+                                             </div>
+                        
+                                        <td>Computer Science</td>
+                                        <td>Graduated</td>
+                                        <td>29 April, 2021</td>
+                                     
+                                        </td>
+                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span> </td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fred Davis</td>
+                                        <td>Full time</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHPUnit</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">Unix/Linix/MVC</span></td>
+                                             </div>
+                                        <td>Computer Science</td>
+                                        <td>Undergrad </td>
+                                        <td>23 April, 2021</td>
+                                        
+                                        </td>
+                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Adnan Jamshed</td>
+                                        <td>Full Time</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS/Ajax</span></td>
+                                             </div>
+                        
+                                        <td>Computer Science</td>
+                                        <td>Graduated </td>
+                                        <td>19 April, 2021</td>
+                                    
+                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kiran Khan</td>
+                                        <td>Full Time</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">CakePHP</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">Ajax//JQuery/MySQL</span></td>
+                                             </div>
+                        
+                                        <td>Computer Science</td>
+                                        <td>Undergrad </td>
+                                        <td>18 April, 2021</td>
+                                     
+                                        </td>
+                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Abdul Rehman</td>
+                                        <td>Experienced Professional</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP/PHPUnit</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/JavaScript</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">CSS</span>
+                                            </div>
+                                        </td>
+                        
+                                    <td>Computer Science</td>
+                                    <td>Graduated/Masters </td>
+                                    <td>17 April, 2021</td>
+                                     
+                                        </td>
+                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Naveed Shaahid</td>
+                                        <td>Internship</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP/CSS</span>
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">Web Graphics</span>
+                                                </td>
+                                             </div>
+                                        <td>Computer Science</td>
+                                        <td>Graduated/Masters </td>
+                                        <td>10 April, 2021</td>
+        
+                                     
+                                        </td>
+                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Randy Miller</td>
+                                        <td>FullTime</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
+                                             </div>
+                                        <td>Computer Science</td>
+                                        <td>Graduated/Masters </td>
+                                        <td>25 March, 2021</td>
+                                    
+                                     
+                                        </td>
+                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Accept</span>
+                                        </td>
+                                    </tr>
+                                    
+
+  
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            
+        </main>
+        
+    </div>
     
-    /* On mouse-over */
-    .sidebar-menu li a:hover, .user-btn:hover {
-      text-decoration: underline;
-    }
-    
-    
-    .user-btn:hover + .hidden {
-      display: block;
-    }
-    
+</body>
+
+</html>

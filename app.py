@@ -50,6 +50,11 @@ def approve_posting():
 def job_approval_response():
     return render_template("job_approval_response.html")
 
+@app.route('/search_students')
+def employer_search_students_response():
+    return render_template("employer_search_students.html")
+
+
 # main driver function
 if __name__ == '__main__':
   
