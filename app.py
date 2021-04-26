@@ -54,6 +54,15 @@ def job_approval_response():
 def employer_search_students_response():
     return render_template("employer_search_students.html")
 
+@app.route('/upload_data_CSO')
+def upload_data_CSO():
+    return render_template("upload_data_CSO.html")
+
+
+@app.route('/view_uploaded_students_CSO')
+def view_uploaded_students_CSO():
+    return render_template("view_uploaded_students_CSO.html")
+
 
 # main driver function
 if __name__ == '__main__':
