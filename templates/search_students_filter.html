@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Search Students</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
+</head>
+
+<style>
+
+body {
+   background-color: #F1F5F9;
+}
+
+
+.sidebar-menu ul ul li a {
+  color: white;
+  padding-left: 25px;
+}
+
+.sidebar-menu ul ul li {
+   margin-bottom: 2%;
+   width: 200px
+}
+
+.sidebar-menu ul ul {
+display: none
+}
+
+.sidebar-menu li:hover > ul {
+        display: block;
+                
+}
+
+/* On mouse-over */
+.sidebar-menu li a:hover, .user-btn:hover {
+  text-decoration: underline;
+}
+
+
+.user-btn:hover + .hidden {
+  display: block;
+}
+
+
+.search-job-button
+{
+    font-size: 16px;
+    color: white;
+    background-color: rgb(68,129,235);
+    border-radius: 3px;
+    border:none;
+    
+    width: fit-content;
+    padding: 5px 5px;
+    align-content: center;
+    cursor: pointer;
+}
+
+input[type=text], select {
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+td {
+    width: 100% !important;
+}
+
+.success:hover {
+      opacity: 0.7;
+}
+
+span.badge.success:active, span.badge.success:focus, span.badge.success:visited, span.badge.success:checked {
+      background-color: blue !important;
+      color: darkred;
+}
+
+
+.fields {
+    align-items: center;
+    text-align: justify;
+    justify-content: center;
+}
+
+
+</style>
+
+<body>
+    
+    <input type="checkbox" id="sidebar-toggle">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3 class="brand">
+                <span class="ti-unlink"></span> 
+                <span style="font-family: Quicksand, sans-serif; font-size: 12px;">Campus Career Portal</span>
+            </h3> 
+            <label for="sidebar-toggle" class="ti-menu-alt"></label>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="">
+                        <span class="ti-home"></span>
+                        <span>Home</span>
+                    </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="" class="user-btn">
+                        <span class="ti-clipboard"></span>
+                        <span>Applications</span>
+                    </a>
+
+                </li>
+                <li>
+                    <a href="">
+                        <span class="ti-calendar"></span>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="user-btn">
+                        <span class="ti-id-badge"></span>
+                        <span>Jobs<span class="ti-arrow-down"></span></span>
+                    </a>
+
+                    <ul id="user-show">
+                        <li>
+                            <a href="">
+                                <span class="ti-pencil-alt"></span>
+                                <span class="text">Submit Job to CSO</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <span class="ti-archive"></span>
+                                <span class="text">Your Jobs</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <span class="ti-bolt-alt"></span>
+                                <span class="text">Active Jobs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="">
+                        <span class="ti-bar-chart-alt"></span>
+                        <span>Reports</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-search"></span>
+                        <span>Search Students</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-settings"></span>
+                        <span>Account Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    <div class="main-content">
+        
+        <header>
+            <div class="search-wrapper">
+                <span class="ti-search"></span>
+                <input type="search" placeholder="Web PHP Developer">
+            </div>
+            
+            <div class="social-icons">
+                <span class="ti-bell"></span>
+                <span class="ti-comment"></span>
+                <div></div>
+            </div>
+        </header>
+        
+        <main>
+            
+            <h2 class="dash-title"> Apply Filter to Find <span style="color: rgb(68,129,235);"> Students </span></h2>
+
+            <br>
+            <br>
+
+            
+                    <div class="activity-card" style="position:relative; height:95% !important;width:22% !important;  margin-top:-10px">
+                        <h3>Filter Students By</h3>
+                        
+                        <div class="table-responsive">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="fields">
+                                            <span style="font-size:16px; font-weight:bold">Search By</span>
+                                            <br>
+                                            <input type="text" id="keyword" name="keyword" placeholder="Keyword">
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="fields">
+                                            <span style="font-size:16px; font-weight:bold">School year</span>
+                                            <br>
+                                            <br>
+
+                                            <input type="checkbox" id="freshman" name="freshman" value="freshman">
+                                            <span>Freshman year</span>
+                                            <br>
+
+                                            <input type="checkbox" id="freshman" name="freshman" value="freshman">
+                                            <span>Sophomore year</span>
+                                            <br>
+
+
+                                            <input type="checkbox" id="freshman" name="freshman" value="freshman">
+                                            <span>Junior year</span>
+                                            <br>
+
+
+                                            <input type="checkbox" id="freshman" name="freshman" value="freshman">
+                                            <span>Senior year</span>
+                                            <br>
+
+
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="fields">
+                                            <span style="font-size:16px; font-weight:bold">GPA</span>
+                                            <br>
+                                            <br>
+                                            <select name="gpa" id="gpa">
+                                             <option value="All">All</option>
+                                              <option value="2.0-2.5">2.0-2.5</option>
+                                              <option value="2.5-3.0">2.5-3.0</option>
+                                              <option value="3.0-3.5">3.0-3.5</option>
+                                              <option value="3.5-4.0">3.5-4.0</option>
+                                            </select>
+
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>
+                                            <div class="fields">
+                                                <span style="font-size:16px; font-weight:bold">Skills</span>
+                                                <br>
+                                                <br>
+                                                <input type="text" id="skills" name="skills" placeholder="Find Skills">
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="padding: 5px; margin: 5px 5px;">PHP</span>
+                                                <span class="badge success" style="padding: 5px;margin: 5px 5px;">HTML/CSS</span>
+                                                <span class="badge success" style="padding: 5px; margin: 5px 5px;">Python</span>
+                                                <span class="badge success" style="padding: 5px;margin: 5px 5px;">SQL</span>
+
+                                             </div>
+                                        </div>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="fields">
+                                                <span style="font-size:16px; font-weight:bold">Major</span>
+                                                <br>
+                                                <br>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="padding: 5px; margin: 5px 5px;">Computer Science</span>
+                                                <span class="badge success" style="padding: 5px;margin: 5px 5px;">Software Engineering</span>
+                                                <span class="badge success" style="padding: 5px; margin: 5px 5px;">Cybersecurity</span>
+                                                <span class="badge success" style="padding: 5px;margin: 5px 5px;">Business Administration</span>
+
+                                             </div>
+                                        </div>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                    <button class=search-job-button style="margin-left:75px;"> Apply Filters </button>
+                                </td>
+                                </tr>
+                                    
+                                </tbody>
+ 
+
+                            </table>
+                        </div>
+                        </div>
+
+
+
+
+                        
+                        <div class="activity-card" style="position: absolute; width:60%; height:75% !important;  top: 0; margin-top:10% !important; margin-left: 25% !important;">
+                        
+                        <div class="table-responsive">
+                            <table style="  table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Skills</th>
+                                        <th>Degree</th>
+                                        <th>Status</th>
+                                        <th>Contact</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Andrew Simons</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
+                                             </div>
+                        
+                                        <td>Computer Science</td>
+                                        <td>Graduated</td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
+                                        </td>
+                                     
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Fred Davis</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHPUnit</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">Unix/Linix/MVC</span></td>
+                                             </div>
+                                        <td>Computer Science</td>
+                                        <td>Undergrad </td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
+                                        </td>
+                                        
+                                        </td>
+ 
+                                    </tr>
+                                    <tr>
+                                        <td>Adnan Jamshed</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS/Ajax</span></td>
+                                             </div>
+                        
+                                        <td>Computer Science</td>
+                                        <td>Graduated </td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
+                                        </td>
+                                    
+
+                                    </tr>
+                                    <tr>
+                                        <td>Kiran Khan</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">CakePHP</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">Ajax//JQuery/MySQL</span></td>
+                                             </div>
+                        
+                                        <td>Computer Science</td>
+                                        <td>Undergrad </td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
+                                        </td>
+                                     
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Abdul Rehman</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP/PHPUnit</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/JavaScript</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">CSS</span>
+                                            </div>
+                                        </td>
+                        
+                                    <td>Computer Science</td>
+                                    <td>Graduated/Masters </td>
+                                    <td>
+                                        <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
+                                    </td>
+                                     
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Naveed Shaahid</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP/CSS</span>
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">Web Graphics</span>
+                                                </td>
+                                             </div>
+                                        <td>Computer Science</td>
+                                        <td>Graduated/Masters </td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
+                                        </td>
+        
+                                     
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Randy Miller</td>
+                                        <td>
+                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
+                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
+                                             </div>
+                                        <td>Computer Science</td>
+                                        <td>Graduated/Masters </td>
+                                        <td>
+                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
+                                        </td>
+                                    
+                                     
+                                        </td>
+
+                                    </tr>
+                                
+  
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+        
+        
+
+
+                    </div>
+                
+        
+    </div>
+    
+</body>
+
+</html>
+
