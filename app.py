@@ -57,11 +57,14 @@ def employer_search_students_response():
 @app.route('/apply_student_filter')
 def search_students_filter():
     return render_template("search_students_filter.html")
-    
+
 @app.route('/upload_data_CSO')
 def upload_data_CSO():
     return render_template("upload_data_CSO.html")
 
+@app.route('/post_job')
+def post_job():
+    return render_template("post_job.html")
 
 @app.route('/view_uploaded_students_CSO')
 def view_uploaded_students_CSO():
