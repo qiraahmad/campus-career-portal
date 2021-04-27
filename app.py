@@ -70,6 +70,10 @@ def post_job():
 def view_uploaded_students_CSO():
     return render_template("view_uploaded_students_CSO.html")
 
+@app.route('/apply_job_final')
+def final_job_apply():
+    return render_template("apply_now_form_student_1.html")
+
 
 # main driver function
 if __name__ == '__main__':

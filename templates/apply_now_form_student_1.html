@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Apply for Job</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
+</head>
+
+<style>
+
+body {
+   background-color: #F1F5F9;
+}
+
+
+.sidebar-menu ul ul li a {
+  color: white;
+  padding-left: 25px;
+}
+
+.sidebar-menu ul ul li {
+   margin-bottom: 2%;
+   width: 200px
+}
+
+.sidebar-menu ul ul {
+display: none
+}
+
+.sidebar-menu li:hover > ul {
+        display: block;
+                
+}
+
+/* On mouse-over */
+.sidebar-menu li a:hover, .user-btn:hover {
+  text-decoration: underline;
+}
+
+
+.user-btn:hover + .hidden {
+  display: block;
+}
+
+.search-job-button
+{
+    font-size: 16px;
+    color: white;
+    background-color: rgb(68,129,235);
+    border-radius: 3px;
+    border:none;
+    
+    width: 200px;
+    height: 40px;
+    padding: 5px 5px;
+    align-content: center;
+    cursor: pointer;
+}
+
+input[type=text], select {
+  width: 400px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.fields {
+    align-items: center;
+    text-align: justify;
+    justify-content: center;
+}
+
+
+</style>
+
+<body>
+    
+    <input type="checkbox" id="sidebar-toggle">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3 class="brand">
+                <span class="ti-unlink"></span> 
+                <span style="font-family: Quicksand, sans-serif; font-size: 12px;">Campus Career Portal</span>
+            </h3> 
+            <label for="sidebar-toggle" class="ti-menu-alt"></label>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="">
+                        <span class="ti-home"></span>
+                        <span>Home</span>
+                    </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-calendar"></span>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="user-btn">
+                        <span class="ti-id-badge"></span>
+                        <span>Jobs<span class="ti-arrow-down"></span></span>
+                    </a>
+
+                    <ul id="user-show">
+                        <li>
+                            <a href="">
+                                <span class="ti-archive"></span>
+                                <span class="text">Jobs Applied For</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <span class="ti-bolt-alt"></span>
+                                <span class="text">Active Jobs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="">
+                        <span class="ti-bar-chart-alt"></span>
+                        <span>Reports</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-search"></span>
+                        <span>Search Jobs</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-settings"></span>
+                        <span>Account Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    <div class="main-content">
+        
+        <header>
+            <div class="search-wrapper">
+                <span class="ti-search"></span>
+                <input type="search" placeholder="Search">
+            </div>
+            
+            <div class="social-icons">
+                <span class="ti-bell"></span>
+                <span class="ti-comment"></span>
+                <div></div>
+            </div>
+        </header>
+        
+        <main>
+            
+            <h2 class="dash-title">Apply For Job</h2>
+            
+            <div class="activity-card" style="text-align:center !important; height:720px !important;width:52% !important; align-self: center; margin-left: 25%;">
+                <h3 style="text-align: center;">Apply to New Job - Final Step </h3>
+                
+                <div class="summary">
+                    <div class="summary-card" style="height:720px;text-align:center !important;">
+
+
+                        <div class="summary-single">
+                            <span class="ti-rocket"></span>
+                            <div>
+                                <h5>Skills *</h5>
+                                <div class="fields">
+                                <input type="text" id="skills" name="skills" placeholder="Find Skills">
+                                <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                    <span class="badge success" style="padding: 5px; margin: 5px 5px; font-size: 14px;">PHP</span>
+                                    <span class="badge success" style="padding: 5px;margin: 5px 5px; font-size: 14px;">HTML/CSS</span>
+                                    <span class="badge success" style="padding: 5px; margin: 5px 5px; font-size: 14px;">Python</span>
+                                    <span class="badge success" style="padding: 5px;margin: 5px 5px; font-size: 14px;">SQL</span>
+        
+                                 </div>
+                            </div>
+        
+                            </div>
+                        </div>
+
+                        <div class="summary-single">
+                            <span class="ti-linkedin"></span>
+                            <div>
+                                <h5>LinkedIn Profile Link *</h5>
+                                <input name="link" type="text" maxlength="3200"/>
+                            </div>
+                        </div>
+
+                        <div class="summary-single">
+                            <span class="ti-rocket"></span>
+                            <div>
+                                <h5>Total Work Experience</h5>
+                                <input name="work" type="number" />
+                            </div>
+                        </div>
+
+
+                        <div class="summary-single">
+                            <span class="ti-write"></span>
+                            <div>
+                                <h5>Feedback/Comments/Queries</h5>
+                                <input name="query" type="text" maxlength="3200" style="width: 400px; height:300px;"/>
+                            </div>
+                        </div>
+
+
+
+                        <button class=search-job-button style="margin-left:10%;">Submit Application</button>
+
+                        
+                    </div>
+
+
+
+                   
+                </div>
+                </div>
+
+            
+        </main>
+        
+    </div>
+    
+</body>
+
+</html>
