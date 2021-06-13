@@ -15,50 +15,94 @@
     <div class="container">
       <div class="forms-container">
         <div class="signin-signup">
-          <form action="#" class="sign-in-form" style="margin-top:5%;">
+          <form action="{{ url_for('create_recruiter') }}" role="form" method="post" action="" class="sign-in-form" style="margin-top:5%;">
             <p class="social-text" href="">Want to Sign Up as A Recruiter?</p>
             <h2 class="title">Sign Up</h2>
+
+            {{ form.hidden_tag() }} 
+
+            <div class="card-header">
+              <label class="title" style="font-size: 18px; ">Register</label><br>
+
+              <h6 class="card-category" style="font-size: 16px;">
+                  {% if msg %}
+                    <span class="text-danger">{{ msg | safe }}</span>
+                  {% else %}
+                    Complete your credentials
+                  {% endif %}  
+              </h6>
+            </div>
+
+
             <div class="input-field">
                 <i class="fas fa-envelope"></i>
-                <input type="text" placeholder="Email Address (Work Email)" />
+                {{ form.email(class="form-control", type="email") }}
               </div>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" placeholder="Recruiter Name" />
+              {{ form.full_name(class="form-control") }}
             </div>
             <div class="input-field">
                 <i class="fas fa-building"></i>
-                <input type="text" placeholder="Company Name" />
+                {{ form.company_name(class="form-control") }}
               </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" placeholder="Password" />
+              {{ form.password(class="form-control", type="password") }}
             </div>
             <div class="input-field">
                 <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Reconfirm Password" />
+                {{ form.password_confirm(class="form-control", type="password") }}
+
+                {% for error in form.password_confirm.errors %}
+                <ul>
+                  <li style="color: red;">{{error}}</li>
+                </ul>
+                {% endfor %}
+
               </div>
-            <input type="submit" value="Sign Up" class="btn solid" />
+              <div class="input-field">
+                <i class="fas fa-mobile"></i>
+                {{ form.contact_number(class="form-control") }}
+              </div>
+
+            <button class="btn btn-warning" id="button1" style="font-size:13px;"  type="submit" name="register" class="btn btn-fill btn-primary" style = "top:-100px; left:90px">Register</button>
             <br>
             <p class="social-text">Want to know what we do?</p>
             <a style="text-decoration: none; color:#4481eb" href="/learn_more">Learn More</a>
           </form>
           
-          <form action="#" class="sign-up-form">
+          <form action="{{ url_for('login') }}" role="form" method="post" action="" class="sign-up-form" style="margin-top:5%;">
+              
+            {{ form1.hidden_tag() }} 
+
             <h2 class="title">Sign in</h2>
+
+            <h6 class="card-category" style="font-size: 14px;">
+              {% if msg %}
+                <span class="text-danger">{{ msg | safe }}</span>
+              {% else %}
+              <span>
+              <a style="color:#ee5d2f; font-size: 14px;" href={{ url_for('create_recruiter') }} >create your own user</a>
+              </span>
+              {% endif %}  
+          </h6>
+
             <div class="input-field">
               <i class="fas fa-envelope"></i>
-              <input type="text" placeholder="Email" />
+              {{ form1.email(class="form-control") }}
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>
-              <input type="password" placeholder="Password" />
+              {{ form1.password(class="form-control", type="password") }}
             </div>
             <input type="submit" value="Login" class="btn solid" />
             <br>
             <p class="social-text">Want to know what we do?</p>
             <a style="text-decoration: none; color:#4481eb" href="/learn_more">Learn More</a>
+
           </form>
+
         </div>
       </div>
 
