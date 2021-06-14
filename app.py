@@ -1,6 +1,6 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from security import Hash
 from sqlalchemy import Column, Integer, String, Boolean
@@ -31,7 +31,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
 app.config['SECRET_KEY'] = 'ccp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-from models import db, Recruiter, CSO, Student, login_manager
+from models import db, Recruiter, CSO, Student, Users, login_manager
 
 db.init_app(app) 
 login_manager.init_app(app) 
@@ -114,8 +114,7 @@ def final_job_apply():
 def create_recruiter():
     create_account_form = CreateRecruiterForm(request.form)
     login_form = LoginForm()
-    if 'register' in request.form:
-    
+    if request.method == 'POST':
         full_name = request.form['full_name']
         email     = request.form['email']
         contact = request.form['contact_number']
@@ -126,18 +125,27 @@ def create_recruiter():
         if pw!=c_pw:
             return render_template( 'sign_in.html', msg='Passwords do not match', form=create_account_form, form1=login_form)
 
-        user=db.session.query(Recruiter).filter_by(email=email).first()
+        user=db.session.query(Users).filter_by(email=email).first()
         if user:
             return render_template( 'sign_in.html', msg='Email already registered', form=create_account_form, form1=login_form)
 
         # else we can create the user
-        user = Recruiter(
+        user = Users(
                     email = request.form['email'], full_name=full_name,
-                    password = Hash.hash_password(request.form['password']), company_name= company,
-                    contact_number = contact, job_posted=False,
+                    password = Hash.hash_password(request.form['password']),
+                    contact_number = contact, role_id=1,
                     created_at = str(datetime.now()).split('.')[0])
         db.session.add(user)
         db.session.commit()
+
+                # else we can create the user
+        recruiter = Recruiter(
+                    user_id = user.id,
+                    company_name = company, job_posted=False,
+                    created_at = str(datetime.now()).split('.')[0])
+        db.session.add(recruiter)
+        db.session.commit()
+
         return render_template('sign_in.html', msg='User created please <a href="/login">login</a>', form=create_account_form, 
         form1=login_form)
 
@@ -150,25 +158,22 @@ def create_recruiter():
 def login():
     login_form = LoginForm(request.form)
     register_form = CreateRecruiterForm()
-    if 'login' in request.form:
+    if request.method == 'POST':
         # read form data
         email = request.form['email']
         password = request.form['password']
-        user=db.session.query(Recruiter).filter_by(email=email).first()
-        
-        # Check the password
-        if user and (Hash.verify_password(user.password, password)):
+        user=db.session.query(Users).filter_by(email=email).first()
+
+        if user is None:
+            return render_template('sign_in.html', msg="Invalid credentials, try again", form1=login_form, form=register_form)
+        elif Hash.verify_password(user.password, password):
             login_user(user)
-            session['email'] = user.email
-            return redirect(url_for('index'), form1=login_form, form=register_form)
+            return redirect(url_for('recruiter_dashboard'))
+        else:    
+            return render_template('sign_in.html', msg="Invalid password, try again", form1=login_form, form=register_form)
 
-        # Something (user or pass) is not ok
-        return render_template( 'sign_in.html', msg='Wrong user or password', form1=login_form, form=register_form)
-
-    if not current_user.is_authenticated:
+    else:
         return render_template( 'sign_in.html', form1=login_form, form=register_form)
-    return redirect(url_for('recruiter_dashboard'))
-
 
 
 # main driver function
