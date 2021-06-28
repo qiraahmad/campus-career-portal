@@ -1,9 +1,34 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from flask_login import LoginManager, UserMixin
+from sqlalchemy.dialects.postgresql import JSONB
+
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+
+class Job_Post(db.Model, UserMixin):
+    
+    __tablename__ = 'Job_Post'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('Users.id'))
+    job_title = db.Column(db.String(300))
+    employment_type = Column(Integer)
+    created_at = db.Column(db.String(200))
+    location = db.Column(db.String(100))
+    job_description = db.Column(db.String(800))
+    skills = db.Column(JSONB)
+
+
+    def __init__(self, user_id, job_title, employment_type, location, job_description, skills, created_at):
+        self.user_id = user_id
+        self.job_title = job_title
+        self.employment_type = employment_type
+        self.location = location
+        self.job_description = job_description
+        self.skills = skills
+        self.created_at = created_at
 
 class Users(db.Model, UserMixin):
     

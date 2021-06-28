@@ -9,7 +9,50 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
 </head>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 <style>
+
+
+#tags {
+  float: left;
+  border: 1px solid #ccc;
+  padding: 4px;
+}
+
+#tags span.tag {
+  cursor: pointer;
+  display: block;
+  float: left;
+  color: white;
+  background: rgb(68,129,235) !important;
+  padding: 5px 10px;
+  padding-right: 30px;
+  margin: 4px;
+  font-size: 14px;
+}
+
+#tags span.tag:hover {
+  opacity: 0.7;
+}
+
+#tags span.tag:after {
+  content: "×";
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 0 4px;
+  margin: 3px 0 10px 7px;
+  font-size: 10px;
+}
+
+#tags input {
+  background: #eee;
+  border: 0;
+  margin: 4px;
+  padding: 7px;
+}
 
 
 .sidebar-menu ul ul li a {
@@ -90,7 +133,7 @@ input[type=text], select {
         <div class="sidebar-menu">
             <ul>
                 <li>
-                    <a href="">
+                    <a href="recruiter_dashboard">
                         <span class="ti-home"></span>
                         <span>Home</span>
                     </span>
@@ -183,6 +226,8 @@ input[type=text], select {
             
             <div class="activity-card" style="position:relative; height:95% !important;width:52% !important; align-self: center; margin-left: 25%;">
                 <h3 style="text-align: center;">Submit Job to CSO</h3>
+
+                <form action="{{ url_for('post_job') }}" role="form" style="margin-top:5%;">
                 
                 <div class="summary">
                     <div class="summary-card" style="height:900px">
@@ -191,7 +236,7 @@ input[type=text], select {
                             <span class="ti-id-badge"></span>
                             <div>
                                 <h5>Job Title</h5>
-                                <input placeholder="Job Title" name="Job" type="text" maxlength="200"/>
+                                <input placeholder="Job Title" id="Job" name="Job" type="text" maxlength="200" required/>
                             </div>
                         </div>
 
@@ -200,12 +245,12 @@ input[type=text], select {
                             <span class="ti-briefcase"></span>
                             <div>
                                 <h5>Employment Type</h5>
-                                <select class="job-type" name="job-type" id="jobs-type" >
+                                <select class="job-type" name="job-type" id="job-type" required>
                                     <option value="" disabled selected>Select Employment Type</option>
-                                    <option value="disabled selected">Full-time</option>
-                                    <option value="disabled selected">Part-time</option>
-                                    <option value="disabled selected">Contract</option>
-                                    <option value="last-24">Intern</option>
+                                    <option value="Full-time">Full-time</option>
+                                    <option value="Part-time">Part-time</option>
+                                    <option value="Contract">Contract</option>
+                                    <option value="Intern">Intern</option>
                                 </select>
                             </div>
                         </div>
@@ -467,7 +512,7 @@ input[type=text], select {
                             <span class="ti-write"></span>
                             <div>
                                 <h5>Job Description</h5>
-                                <input name="Job" type="text" maxlength="3200" style="width: 400px; height:300px;"/>
+                                <input name="jd" id="jd" type="text" maxlength="3200" style="width: 400px; height:300px;"/>
                             </div>
                         </div>
 
@@ -475,23 +520,22 @@ input[type=text], select {
                             <span class="ti-rocket"></span>
                             <div>
                                 <h5>Skills Required</h5>
-                                <div class="fields">
-                                <input type="text" id="skills" name="skills" placeholder="Find Skills">
-                                <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                    <span class="badge success" style="padding: 5px; margin: 5px 5px; font-size: 14px;">PHP</span>
-                                    <span class="badge success" style="padding: 5px;margin: 5px 5px; font-size: 14px;">HTML/CSS</span>
-                                    <span class="badge success" style="padding: 5px; margin: 5px 5px; font-size: 14px;">Python</span>
-                                    <span class="badge success" style="padding: 5px;margin: 5px 5px; font-size: 14px;">SQL</span>
-        
-                                 </div>
-                            </div>
+
+                                <div id="tags">
+                                    <input  class="form-control skill-input" id="skills"
+                                    type="text" value="" placeholder="Add a skill" name="skills"/>
+                                </div>
+            
+                            
         
                             </div>
                         </div>
 
+                        
+                       <br>
+                       <br>
 
-                        <button class=search-job-button style="margin-left:35%;">Submit Job to CSO</button>
-
+                        <button id="submit" class=search-job-button style="margin-left:35%;">Submit Job to CSO</button>
                         
                     </div>
 
@@ -509,3 +553,51 @@ input[type=text], select {
 </body>
 
 </html>
+
+<script>
+
+jQuery(function($) {
+
+var skills = [];
+
+$('#tags input').on('focusout', function() {
+  var txt = this.value.replace(/[^a-zA-Z0-9\+\-\.\#]/g, ''); // allowed characters list
+  if (txt) $(this).before('<span class="tag">' + txt + '</span>');
+  skills.push(txt);
+  console.log(skills); //final array of skills
+  this.value = "";
+})
+
+$("form").on("submit", function(){
+    var value_data = skills;
+    var city = $('#Location').val();
+    var job = $('#Job').val();
+    var job_type = $('#job-type').val();
+    var jd = $('#jd').val();
+  $.ajax({
+    type: 'POST',
+    url: '/post_job',
+    data:  JSON.stringify( {'city': city, 'job': job,  'job_type': job_type, 'jd': jd, 'skills':value_data} ),
+    contentType: 'application/json',
+});
+
+})
+
+});
+
+
+$('#tags').on('click', '.tag', function() {
+  if (confirm("Really delete this tag?")) $(this).remove();
+});
+
+
+$('#tags input').on('keydown', function (e) {
+   if ( event.which == 13 ) {
+           $(this).blur();
+           $(this).focus();
+           return false;
+      }
+ });
+
+    
+</script>

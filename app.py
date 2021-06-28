@@ -13,6 +13,7 @@ from flask_login import (
     login_user,
     logout_user
 )
+import json
 
 # Flask constructor takes the name of s
 # current module (__name__) as argument.
@@ -31,7 +32,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
 app.config['SECRET_KEY'] = 'ccp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-from models import db, Recruiter, CSO, Student, Users, login_manager
+from models import db, Recruiter, CSO, Student, Users, login_manager, Job_Post
 
 db.init_app(app) 
 login_manager.init_app(app) 
@@ -98,9 +99,59 @@ def search_students_filter():
 def upload_data_CSO():
     return render_template("upload_data_CSO.html")
 
-@app.route('/post_job')
+@app.route('/post_job', methods=['GET', 'POST'])
 def post_job():
-    return render_template("post_job.html")
+    if request.method == 'POST':
+        skills = []
+        data = request.get_json()
+        
+        for i in data['skills']:
+            if i=='':
+                del i
+            else:
+                skills.append(i)
+
+        skills = json.dumps(skills)
+
+        if (data['job_type'] == 'Full-time'):
+            job_post = Job_Post(
+                        user_id = session['user_id'], location=data['city'],
+                        job_title = data['job'], employment_type = 1,
+                        skills = skills, job_description=data['jd'],
+                        created_at = str(datetime.now()).split('.')[0])
+            db.session.add(job_post)
+            db.session.commit()
+        elif (data['job_type'] == 'Part-time'):
+            job_post = Job_Post(
+                        user_id = session['user_id'], location=data['city'],
+                        job_title = data['job'], employment_type = 2,
+                        skills = skills, job_description=data['jd'],
+                        created_at = str(datetime.now()).split('.')[0])
+            db.session.add(job_post)
+            db.session.commit()
+        elif (data['job_type'] == 'Contract'):
+            job_post = Job_Post(
+                        user_id = session['user_id'], location=data['city'],
+                        job_title = data['job'], employment_type = 3,
+                        skills = skills, job_description=data['jd'],
+                        created_at = str(datetime.now()).split('.')[0])
+            db.session.add(job_post)
+            db.session.commit()
+        else:
+            job_post = Job_Post(
+                        user_id = session['user_id'], location=data['city'],
+                        job_title = data['job'], employment_type = 4,
+                        skills = skills, job_description=data['jd'],
+                        created_at = str(datetime.now()).split('.')[0])
+            db.session.add(job_post)
+            db.session.commit()
+
+
+        return render_template("post_job.html")
+
+    else:
+        return render_template("post_job.html")
+
 
 @app.route('/view_uploaded_students_CSO')
 def view_uploaded_students_CSO():
@@ -168,13 +219,15 @@ def login():
             return render_template('sign_in.html', msg="Invalid credentials, try again", form1=login_form, form=register_form)
         elif Hash.verify_password(user.password, password):
             login_user(user)
+            session['username'] = email
+            session['user_id'] = user.id
             return redirect(url_for('recruiter_dashboard'))
         else:    
             return render_template('sign_in.html', msg="Invalid password, try again", form1=login_form, form=register_form)
 
     else:
         return render_template( 'sign_in.html', form1=login_form, form=register_form)
-
+    
 
 # main driver function
 if __name__ == '__main__':
