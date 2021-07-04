@@ -102,6 +102,26 @@ class CSO(db.Model, UserMixin):
         self.created_at = created_at
         self.campus_name = campus_name
 
+class Employment_Type(db.Model, UserMixin):
+    
+    __tablename__ = 'Employment_Type'
+
+    employment_type_id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(200))
+
+    def __init__(self, description):
+        self.description = description
+
+class User_Roles(db.Model, UserMixin):
+    
+    __tablename__ = 'User_Roles'
+
+    user_role_id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(200))
+
+    def __init__(self, description):
+        self.description = description
+
 @login_manager.user_loader
 def user_loader(email):
     user = Users.query.filter_by(email=email).one_or_none()
