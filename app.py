@@ -81,7 +81,20 @@ def view_all_jobs():
         company = db.session.query(Recruiter).filter_by(user_id=session["user_id"]).first()
         c_info.append(company.company_name)
 
-    return render_template("view_jobs.html", posts=zip(posts, e_type, c_info))
+    return render_template("view_recruiter_jobs.html", posts=zip(posts, e_type, c_info))
+
+@app.route('/view_active_jobs')
+def view_active_jobs():
+    posts = db.session.query(Job_Post).all()
+    e_type = []
+    c_info = []
+    for job in posts:
+        employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+        e_type.append(employment_type.description)
+        company = db.session.query(Recruiter).filter_by(user_id=session["user_id"]).first()
+        c_info.append(company.company_name)
+
+    return render_template("view_recruiter_jobs.html", posts=zip(posts, e_type, c_info))
 
 @app.route('/view-job-details-student')
 def view_job_details_dashboard():
@@ -158,8 +171,7 @@ def post_job():
             db.session.add(job_post)
             db.session.commit()
 
-
-        return render_template("post_job.html")
+        return redirect(request.path)
 
     else:
         return render_template("post_job.html")
