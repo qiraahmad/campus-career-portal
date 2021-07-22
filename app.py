@@ -54,6 +54,10 @@ def index():
 def learn_more():
     return render_template("learn_more.html")
 
+@app.route('/calendar')
+def calendar():
+    return render_template("calendar.html")
+
 @app.route('/cso_dashboard')
 def cso_dashboard():
     return render_template("cso_dashboard.html")
