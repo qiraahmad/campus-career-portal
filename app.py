@@ -87,6 +87,30 @@ def view_all_jobs():
 
     return render_template("view_recruiter_jobs.html", posts=zip(posts, e_type, c_info))
 
+@app.route('/view_students')
+def view_students():
+    students = db.session.query(Users).all()
+    info = []
+    for user in students:
+        student_info = db.session.query(Student).filter_by(user_id=user.id).first()
+        if student_info is not None:
+            info.append(student_info)
+
+    return render_template("view_students.html", posts=zip(students, info))
+
+@app.route('/view_recruiters')
+def view_recruiters():
+    students = db.session.query(Users).all()
+    print(students)
+    info = []
+    for user in students:
+        student_info = db.session.query(Recruiter).filter_by(user_id=user.id).first()
+        print(student_info)
+        if student_info is not None:
+            info.append(student_info)
+
+    return render_template("view_recruiters.html", posts=zip(students, info))
+
 @app.route('/view_active_jobs')
 def view_active_jobs():
     posts = db.session.query(Job_Post).all()
