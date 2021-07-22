@@ -272,7 +272,13 @@ def login():
             login_user(user)
             session['username'] = email
             session['user_id'] = user.id
-            return redirect(url_for('recruiter_dashboard'))
+
+            if user.role_id == 1:
+                return redirect(url_for('recruiter_dashboard'))
+            elif user.role_id == 2:
+                return redirect(url_for('cso_dashboard'))
+            else:
+                return redirect(url_for('student_dashboard'))
         else:    
             return render_template('sign_in.html', msg="Invalid password, try again", form1=login_form, form=register_form)
 
