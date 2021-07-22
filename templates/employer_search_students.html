@@ -6,7 +6,8 @@
     <title>Search Students</title>
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">      <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">      
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
 </head>
 
 <style>
@@ -177,7 +178,7 @@ display: none
         <div class="sidebar-menu">
             <ul>
                 <li>
-                    <a href="">
+                    <a href="/recruiter_dashboard">
                         <span class="ti-home"></span>
                         <span>Home</span>
                     </span>
@@ -254,14 +255,23 @@ display: none
         <header>
             <div class="search-wrapper">
                 <span class="ti-search"></span>
-                <input type="search" placeholder="Web PHP Developer">
+                <input type="search" placeholder="Search">
             </div>
+
+            <div class="search-wrapper">
+
+            <div class="dropdown">
+                <button onclick="myFunction()" class="dropbtn">
+                    <i class="fa fa-user"></i>
+                </button>
+                <div id="myDropdown" class="dropdown-content">
+                  <a href="#home">Settings</a>
+                  <a href="#logout">Logout</a>
+                </div>
+              </div>
             
-            <div class="social-icons">
-                <span class="ti-bell"></span>
-                <span class="ti-comment"></span>
-                <div></div>
-            </div>
+          </div>
+                    
         </header>
         
         <main>
