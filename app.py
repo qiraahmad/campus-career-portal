@@ -140,7 +140,8 @@ def job_approval_response():
 
 @app.route('/search_students')
 def employer_search_students_response():
-    return render_template("employer_search_students.html")
+    return render_template("search_students_filter.html")
+    #return render_template("employer_search_students.html")
 
 @app.route('/apply_student_filter')
 def search_students_filter():
@@ -277,6 +278,13 @@ def login():
 
     else:
         return render_template( 'sign_in.html', form1=login_form, form=register_form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    session['user_id']=False
+    session.pop('username', None)
+    return redirect(url_for('login'))
     
 
 # main driver function
