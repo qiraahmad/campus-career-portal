@@ -1,2 +1,3 @@
 __pycache__/
 venv/
+static/node_modules
