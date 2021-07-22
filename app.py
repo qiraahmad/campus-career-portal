@@ -101,11 +101,9 @@ def view_students():
 @app.route('/view_recruiters')
 def view_recruiters():
     students = db.session.query(Users).all()
-    print(students)
     info = []
     for user in students:
         student_info = db.session.query(Recruiter).filter_by(user_id=user.id).first()
-        print(student_info)
         if student_info is not None:
             info.append(student_info)
 
