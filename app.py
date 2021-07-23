@@ -74,6 +74,10 @@ def recruiter_dashboard():
 def search_job_student_dashboard():
     return render_template("search_job_student.html")
 
+@app.route('/view_student_jobs')
+def view_student_jobs():
+    return render_template("view_student_jobs.html")
+
 @app.route('/view_all_jobs')
 def view_all_jobs():
     posts = db.session.query(Job_Post).filter_by(user_id=session["user_id"]).all()
