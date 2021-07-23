@@ -74,7 +74,7 @@ def recruiter_dashboard():
 def search_job_student_dashboard():
     return render_template("search_job_student.html")
 
-@app.route('/view_student_jobs')
+@app.route('/view_students_jobs')
 def view_student_jobs():
     return render_template("view_student_jobs.html")
 
@@ -173,7 +173,7 @@ def post_job():
             job_post = Job_Post(
                         user_id = session['user_id'], location=data['city'],
                         job_title = data['job'], employment_type = 1,
-                        skills = skills, job_description=data['jd'],
+                        skills = skills, job_description=data['jd'], status=False,
                         created_at = str(datetime.now()).split('.')[0])
             db.session.add(job_post)
             db.session.commit()
@@ -181,7 +181,7 @@ def post_job():
             job_post = Job_Post(
                         user_id = session['user_id'], location=data['city'],
                         job_title = data['job'], employment_type = 2,
-                        skills = skills, job_description=data['jd'],
+                        skills = skills, job_description=data['jd'], status=False,
                         created_at = str(datetime.now()).split('.')[0])
             db.session.add(job_post)
             db.session.commit()
@@ -189,7 +189,7 @@ def post_job():
             job_post = Job_Post(
                         user_id = session['user_id'], location=data['city'],
                         job_title = data['job'], employment_type = 3,
-                        skills = skills, job_description=data['jd'],
+                        skills = skills, job_description=data['jd'], status=False,
                         created_at = str(datetime.now()).split('.')[0])
             db.session.add(job_post)
             db.session.commit()
@@ -197,12 +197,13 @@ def post_job():
             job_post = Job_Post(
                         user_id = session['user_id'], location=data['city'],
                         job_title = data['job'], employment_type = 4,
-                        skills = skills, job_description=data['jd'],
+                        skills = skills, job_description=data['jd'], status=False,
                         created_at = str(datetime.now()).split('.')[0])
             db.session.add(job_post)
             db.session.commit()
 
-        return redirect(request.path)
+
+        return render_template("post_job.html")
 
     else:
         return render_template("post_job.html")

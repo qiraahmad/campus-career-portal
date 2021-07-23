@@ -6,10 +6,9 @@
     <title>Recruiter Dashboard</title>
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    
      
-    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
-    
 </head>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -17,6 +16,47 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <style>
+
+
+.dropbtn {
+  background-color: white;
+  color: black;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  margin: 0px 70px 0px 50px;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: white;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f5f9;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
 
 #tags {
   float: left;
@@ -117,45 +157,6 @@ input[type=text], select {
     justify-content: center;
 }
 
-.dropbtn {
-  background-color: white;
-  color: black;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  margin: 0px 70px 0px 50px;
-}
-
-.dropbtn:hover, .dropbtn:focus {
-  background-color: white;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f5f9;
-  min-width: 160px;
-  overflow: auto;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown a:hover {background-color: #ddd;}
-
-.show {display: block;}
 
 </style>
 
@@ -189,7 +190,7 @@ input[type=text], select {
 
                 </li>
                 <li>
-                    <a href="/calendar">
+                    <a href="">
                         <span class="ti-calendar"></span>
                         <span>Calendar</span>
                     </a>
@@ -208,13 +209,13 @@ input[type=text], select {
                             </a>
                         </li>
                         <li>
-                            <a href="view_all_jobs">
+                            <a href="">
                                 <span class="ti-archive"></span>
                                 <span class="text">Your Jobs</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/view_active_jobs">
+                            <a href="">
                                 <span class="ti-bolt-alt"></span>
                                 <span class="text">Active Jobs</span>
                             </a>
@@ -229,7 +230,7 @@ input[type=text], select {
                 </li>
 
                 <li>
-                    <a href="/search_students">
+                    <a href="">
                         <span class="ti-search"></span>
                         <span>Search Students</span>
                     </a>
@@ -277,7 +278,7 @@ input[type=text], select {
             <div class="activity-card" style="position:relative; height:95% !important;width:52% !important; align-self: center; margin-left: 25%;">
                 <h3 style="text-align: center;">Submit Job to CSO</h3>
 
-                <form action="{{ url_for('post_job') }}" role="form" style="margin-top:5%;" >
+                <form action="{{ url_for('post_job') }}" role="form" style="margin-top:5%;">
                 
                 <div class="summary">
                     <div class="summary-card" style="height:900px">
@@ -295,7 +296,7 @@ input[type=text], select {
                             <span class="ti-briefcase"></span>
                             <div>
                                 <h5>Employment Type</h5>
-                                <select type="" class="job-type" name="job-type" id="job-type" required>
+                                <select class="job-type" name="job-type" id="job-type" required>
                                     <option value="" disabled selected>Select Employment Type</option>
                                     <option value="Full-time">Full-time</option>
                                     <option value="Part-time">Part-time</option>
@@ -310,7 +311,7 @@ input[type=text], select {
                             <span class="ti-world"></span>
                             <div>
                                 <h5>Location</h5>
-                                <select type="" name="Location" id="Location" required>
+                                <select name="Location" id="Location" required>
                                     <option value="" disabled selected>Select The City</option>
                                     <option value="Islamabad">Islamabad</option>
                                     <option value="" disabled>Punjab Cities</option>
@@ -562,7 +563,7 @@ input[type=text], select {
                             <span class="ti-write"></span>
                             <div>
                                 <h5>Job Description</h5>
-                                <input name="jd" id="jd" type="text " maxlength="3200" style="width: 400px; height:300px;"/>
+                                <input name="jd" id="jd" type="text" maxlength="3200" style="width: 400px; height:300px;"/>
                             </div>
                         </div>
 
@@ -573,7 +574,7 @@ input[type=text], select {
 
                                 <div id="tags">
                                     <input  class="form-control skill-input" id="skills"
-                                    type="text " value="" placeholder="Add a skill" name="skills"/>
+                                    type="text" value="" placeholder="Add a skill" name="skills"/>
                                 </div>
             
                             
@@ -602,7 +603,7 @@ input[type=text], select {
     
 </body>
 
-</html> 
+</html>
 
 <script>
     /* When the user clicks on the button, 
@@ -633,7 +634,8 @@ jQuery(function($) {
 var skills = [];
 
 $('#tags input').on('focusout', function() {
-  var txt = this.value; // allowed characters list
+  //var txt = this.value.replace(/[^a-zA-Z0-9\+\-\.\#]/g, ''); // allowed characters list
+  var txt = this.value
   if (txt) $(this).before('<span class="tag">' + txt + '</span>');
   skills.push(txt);
   console.log(skills); //final array of skills
@@ -649,7 +651,8 @@ $("form").on("submit", function(){
   $.ajax({
     type: 'POST',
     url: '/post_job',
-    data:  JSON.stringify( {'city': city, 'job': job,  'job_type': job_type, 'jd': jd, 'skills':value_data} )
+    data:  JSON.stringify( {'city': city, 'job': job,  'job_type': job_type, 'jd': jd, 'skills':value_data} ),
+    contentType: 'application/json',
 });
 
 })
@@ -669,5 +672,6 @@ $('#tags input').on('keydown', function (e) {
            return false;
       }
  });
+
     
 </script>
