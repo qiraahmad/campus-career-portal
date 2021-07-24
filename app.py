@@ -5,7 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 from security import Hash
 from sqlalchemy import Column, Integer, String, Boolean
 from forms import LoginForm, CreateRecruiterForm
+from werkzeug.utils import secure_filename
 import datetime, time
+import csv
+from csv import reader
 from datetime import datetime,timedelta,date
 from flask_login import (
     current_user,
@@ -14,10 +17,20 @@ from flask_login import (
     logout_user
 )
 import json
+import io
+import pandas as pd
+import random, string
+from flask_mail import Mail, Message
 
 # Flask constructor takes the name of s
 # current module (__name__) as argument.
 app = Flask(__name__)
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'qira.ahmad@gmail.com'
+app.config['MAIL_PASSWORD'] = 'datasstho123'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 
 POSTGRES = {
     'user': 'postgres',
@@ -33,9 +46,13 @@ app.config['SECRET_KEY'] = 'ccp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 from models import db, Recruiter, CSO, Student, Users, login_manager, Job_Post, Employment_Type, User_Roles
+from django.conf import settings
+
+settings.configure()
 
 db.init_app(app) 
 login_manager.init_app(app) 
+mail = Mail(app)
 
 
 with app.app_context():
@@ -155,8 +172,56 @@ def search_students_filter():
 def upload_data_CSO():
     return render_template("upload_data_CSO.html")
 
+@app.route('/upload_doc', methods = ['GET', 'POST'])
+def upload_doc():
+    if request.method == 'POST':
+          f = request.files['file']
+          #filename = secure_filename(f.filename)  
+          filestream = f.read()
+          df = pd.read_csv(io.BytesIO(bytearray(filestream)))
+          data_columns = list(df.columns.values.tolist())
+          name, batch, roll_no, dept, email, contact_no = '', '', '', '', '', ''
+          password = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(10))
+
+          for index, row in df.iterrows():
+            for c in data_columns:
+              if 'name' in c or 'Name' in c:
+                name = row[c]
+              if 'batch' in c or 'Batch' in c:
+                batch = row[c]
+              if 'Roll' in c or 'roll' in c:
+                roll_no = row[c]
+              if 'email' in c or 'Email' in c:
+                email = row[c]    
+              if 'dept' in c or 'department' in c or 'Department' in c:
+                dept = row[c]   
+              if 'contact' in c or 'Contact' in c or 'phone' in c or 'Phone' in c:
+                contact_no = row[c]  
+
+            user = Users(
+                    email = email, full_name=name,
+                    password = Hash.hash_password(password),
+                    contact_number = contact_no, role_id=2,
+                    created_at = str(datetime.now()).split('.')[0])   
+            db.session.add(user)
+            db.session.commit()
+
+
+            student = Student(
+            user_id = user.id,
+            department = dept, applied_to_job=False,
+            created_at = str(datetime.now()).split('.')[0])
+            db.session.add(student)
+            db.session.commit()
+
+            msg = Message('Welcome to Campus Career Portal!', sender = 'qira.ahmad@gmail.com', recipients = [email])
+            msg.body = f' Hi { user.full_name }, Welcome to Campus Career Portal! Following are your account details: Email: {user.email} Password: {password}.'
+            mail.send(msg)
+
+    return render_template("upload_data_CSO.html", msg="Users have been registered")
+
 @app.route('/post_job', methods=['GET', 'POST'])
-def post_job():
+def post_job():    
     if request.method == 'POST':
         skills = []
         data = request.get_json()

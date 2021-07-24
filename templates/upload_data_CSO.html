@@ -148,6 +148,7 @@ display: none
     cursor: pointer;
 }
 
+
 </style>
 
 <body>
@@ -282,7 +283,7 @@ display: none
                         <div class="upload-row-div">
 
 
-                        <form action="/action_page.php">
+                            <form action="/action_page.php">
                                 <label class="labels">Program:</label>
                                   <select class="batch" name="batch-name-list" id="batch-names" >
                                   <option value="disabled selected">Select Program</option>
@@ -294,6 +295,7 @@ display: none
                                 
             
                         </form>
+
                         <form action="/action_page.php">
                             <label class="labels">Batch:</label>
                               <select class="batch" name="batch-name-list" id="batch-names" >
@@ -402,9 +404,16 @@ display: none
                       
                         
                     </div>
-                    <button class=upload-button> Upload File</button>
 
-                    
+                    <form action="/upload_doc" method = "POST" enctype = "multipart/form-data">
+                    <input type = "file" name = "file" onchange="this.form.submit();" />
+                </form>
+
+                <h6 class="card-category" style="font-size: 14px;">
+                    {% if msg %}
+                      <span class="text-danger">{{ msg | safe }}</span>
+                    {% endif %}  
+                </h6>
                   
                 </div>
             </section>
