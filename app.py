@@ -130,6 +130,14 @@ def view_submitted_jobs():
 
     return render_template("view_cso_jobs.html", posts=zip(posts, e_type, c_info))
 
+@app.route('/view_job/<job_id>', methods = ['GET', 'POST'])
+def view_job(job_id):
+    job = db.session.query(Job_Post).filter_by(id=job_id).first()
+    employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+    company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
+    return render_template("view_job.html", data=job, employment_type=employment_type, company=company)
+    
+
 @app.route('/view_students')
 def view_students():
     students = db.session.query(Users).all()
@@ -154,7 +162,7 @@ def view_recruiters():
 
 @app.route('/view_active_jobs')
 def view_active_jobs():
-    posts = db.session.query(Job_Post).all()
+    posts = db.session.query(Job_Post).filter_by(status=True).all()
     e_type = []
     c_info = []
     for job in posts:
@@ -164,6 +172,20 @@ def view_active_jobs():
         c_info.append(company.company_name)
 
     return render_template("view_recruiter_jobs.html", posts=zip(posts, e_type, c_info))
+
+@app.route('/view_approved_jobs')
+def view_approved_jobs():
+    posts = db.session.query(Job_Post).filter_by(status=True).all()
+    e_type = []
+    c_info = []
+    for job in posts:
+        employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+        e_type.append(employment_type.description)
+        company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
+        c_info.append(company.company_name)
+
+    return render_template("view_approved_jobs.html", posts=zip(posts, e_type, c_info))
+
 
 @app.route('/view-job-details-student')
 def view_job_details_dashboard():

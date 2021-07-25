@@ -20,9 +20,9 @@ class Job_Post(db.Model, UserMixin):
     job_description = db.Column(db.String(800))
     skills = db.Column(JSONB)
     status = db.Column(Boolean)
+    message = db.Column(db.String(200))
 
-
-    def __init__(self, user_id, job_title, employment_type, location, job_description, skills, created_at, status):
+    def __init__(self, user_id, job_title, employment_type, location, job_description, skills, created_at, status, message):
         self.user_id = user_id
         self.job_title = job_title
         self.employment_type = employment_type
@@ -31,6 +31,7 @@ class Job_Post(db.Model, UserMixin):
         self.skills = skills
         self.created_at = created_at
         self.status = status
+        self.message = message
 
 class Users(db.Model, UserMixin):
     
