@@ -102,7 +102,16 @@ def search_job_student_dashboard():
 
 @app.route('/view_students_jobs')
 def view_student_jobs():
-    return render_template("view_student_jobs.html")
+    posts = db.session.query(Job_Post).filter_by(status=True).all()
+    e_type = []
+    c_info = []
+    for job in posts:
+        employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+        e_type.append(employment_type.description)
+        company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
+        c_info.append(company.company_name)
+
+    return render_template("view_student_jobs.html", posts=zip(posts, e_type, c_info))
 
 @app.route('/view_all_jobs')
 def view_all_jobs():
@@ -137,7 +146,13 @@ def view_job(job_id):
     company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
     return render_template("view_job.html", data=job, employment_type=employment_type, company=company)
     
-
+@app.route('/apply_for_job/<job_id>', methods = ['GET', 'POST'])
+def apply_for_job(job_id):
+    job = db.session.query(Job_Post).filter_by(id=job_id).first()
+    employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+    company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
+    return render_template("apply_for_job.html", data=job, employment_type=employment_type, company=company)
+    
 @app.route('/view_students')
 def view_students():
     students = db.session.query(Users).all()
@@ -186,6 +201,24 @@ def view_approved_jobs():
 
     return render_template("view_approved_jobs.html", posts=zip(posts, e_type, c_info))
 
+
+@app.route('/update_job/<job_id>', methods = ['GET', 'POST'])
+def update_job_status(job_id):
+    feedback = request.form.get('text')
+    data = request.form['status']
+    job = db.session.query(Job_Post).filter_by(id=job_id).first()
+    status_msg = ''
+    if data == 'Approve':
+        job.status = True;
+        job.message = feedback
+        status_msg = "Job approved!"
+    else:
+        job.status = False
+        job.message = feedback
+        status_msg = "Job rejected!"
+
+    db.session.commit()
+    return render_template("job_post_status.html", status_msg=status_msg)
 
 @app.route('/view-job-details-student')
 def view_job_details_dashboard():

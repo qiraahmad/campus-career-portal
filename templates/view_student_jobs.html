@@ -6,7 +6,7 @@
     <title>Student Dashboard</title>
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">      
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
 </head>
 
@@ -159,6 +159,8 @@ display: none
             <label for="sidebar-toggle" class="ti-menu-alt"></label>
         </div>
 
+
+
         <div class="sidebar-menu">
             <ul>
                 <li>
@@ -189,7 +191,7 @@ display: none
                             </a>
                         </li>
                         <li>
-                            <a href="/view_active_jobs">
+                            <a href="/view_students_jobs">
                                 <span class="ti-bolt-alt"></span>
                                 <span class="text">Active Jobs</span>
                             </a>
@@ -204,7 +206,7 @@ display: none
                 </li>
 
                 <li>
-                    <a href="">
+                    <a href="/student_search_job">
                         <span class="ti-search"></span>
                         <span>Search Jobs</span>
                     </a>
@@ -219,6 +221,8 @@ display: none
             </ul>
         </div>
     </div>
+    
+    
 
     
     <div class="main-content">
@@ -324,11 +328,9 @@ display: none
                                         <th>Job Posting</th>
                                         <th>Position</th>
                                         <th>Skills</th>
-                                        <th>Deadline</th>
                                         <th>Location</th>
-                                        <th>Salary</th>
                                         <th>Company/Recruiter</th>
-                                        <th>Status</th>
+                                        <th>View Job</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -342,10 +344,16 @@ display: none
                                             <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">{{i}}</span>
                                             {% endfor %}
                                         </td>
-                                        <td>{{data1}}</td>
                                         <td>{{data['location']}}</td>
-                                        <td>{{data1}}</td>
                                         <td>{{company}}</td>
+                                       
+                                        
+                                        <td>
+                                            <form action="{{url_for('apply_for_job', job_id = data['id'])}}">
+                                            <button class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;" type="submit">View Job</button>
+                                            </form>
+                                        </td>
+                                       
                                         </div>
 
                                     </tr>
