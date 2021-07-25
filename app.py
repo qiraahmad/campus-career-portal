@@ -89,7 +89,16 @@ def recruiter_dashboard():
   
 @app.route('/student_search_job')
 def search_job_student_dashboard():
-    return render_template("search_job_student.html")
+    posts = db.session.query(Job_Post).filter_by(status=True).all()
+    e_type = []
+    c_info = []
+    for job in posts:
+        employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+        e_type.append(employment_type.description)
+        company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
+        c_info.append(company.company_name)
+
+    return render_template("search_job_student.html", posts=zip(posts, e_type, c_info))
 
 @app.route('/view_students_jobs')
 def view_student_jobs():
@@ -107,6 +116,19 @@ def view_all_jobs():
         c_info.append(company.company_name)
 
     return render_template("view_recruiter_jobs.html", posts=zip(posts, e_type, c_info))
+
+@app.route('/view_submitted_jobs')
+def view_submitted_jobs():
+    posts = db.session.query(Job_Post).filter_by(status=False).all()
+    e_type = []
+    c_info = []
+    for job in posts:
+        employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+        e_type.append(employment_type.description)
+        company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
+        c_info.append(company.company_name)
+
+    return render_template("view_cso_jobs.html", posts=zip(posts, e_type, c_info))
 
 @app.route('/view_students')
 def view_students():
@@ -345,7 +367,7 @@ def login():
 
             if user.role_id == 1:
                 return redirect(url_for('recruiter_dashboard'))
-            elif user.role_id == 2:
+            elif user.role_id == 3:
                 return redirect(url_for('cso_dashboard'))
             else:
                 return redirect(url_for('student_dashboard'))

@@ -225,14 +225,23 @@ display: none
         <header>
             <div class="search-wrapper">
                 <span class="ti-search"></span>
-                <input type="search" placeholder="web development">
+                <input type="search" placeholder="Search">
             </div>
+
+            <div class="search-wrapper">
+
+            <div class="dropdown">
+                <button onclick="myFunction()" class="dropbtn">
+                    <i class="fa fa-user"></i>
+                </button>
+                <div id="myDropdown" class="dropdown-content">
+                  <a href="#home">Settings</a>
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>
             
-            <div class="social-icons">
-                <span class="ti-bell"></span>
-                <span class="ti-comment"></span>
-                <div></div>
-            </div>
+          </div>
+                    
         </header>
         
         <main>
@@ -321,219 +330,36 @@ display: none
                                         <th>Duration</th>
                                         <th>Paid</th>
                                         <th>Company/Recruiter</th>
-                                        <th>View Details</th>
                                         <th>Apply</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for data, data1, company in posts %}
                                     <tr>
-                                        <td>Web PHP Developer</td>
-                                        <td>Internship</td>
+                                        <td>{{data['job_title']}}</td>
+                                        <td>{{data1}}</td>
                                         <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
-                                             </div>
-                        
-                                        <td>5 May, 2021</td>
-                                        <td>1 month</td>
-                                        <td>Paid</td>
-                                        <td> Al-Bari Group of Companies
-                                     
+                                        <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                            {% for i in data['skills'].replace('[','').replace(']','').replace('"','').split(",") %}
+                                            <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">{{i}}</span>
+                                            {% endfor %}
                                         </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span> </td>
+                                        <td>{{data1}}</td>
+                                        <td>{{data['location']}}</td>
+                                        <td>{{data1}}</td>
+                                        <td>{{company}}</td>
                                         <td>
+                                            
+                                        <a href="/view-job-details-student">
                                             <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
+                                        </a>
+
                                         </td>
+                                        </div>
+
                                     </tr>
-                                    <tr>
-                                        <td>React Native Intern</td>
-                                        <td>Internship</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">REACT</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">UI/UX</span></td>
-                                             </div>
-                        
-                                        <td>1 May, 2021</td>
-                                        <td>3 months</td>
-                                        <td>Paid</td>
-                                        <td> NKU Technologies Pvt. Ltd.
-                                     
-                                        </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Word Press/PHP Developer</td>
-                                        <td>Full Time</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
-                                             </div>
-                        
-                                        <td>2 May, 2021</td>
-                                        <td>6 months</td>
-                                        <td>Paid</td>
-                                        <td> Smartcode System</td>
-                                    
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Laravel / PHP Developer</td>
-                                        <td>Full Time</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">Laravel</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">Angular</span></td>
-                                             </div>
-                        
-                                        <td>26 Apr, 2021</td>
-                                        <td>Contract</td>
-                                        <td>Paid</td>
-                                        <td> E-360
-                                     
-                                        </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Junior Web Developer</td>
-                                        <td>Experienced Professional</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">JavaScript</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">Bootstrap</span>
-                                            </div>
-                                        </td>
-                        
-                                        <td>25 Apr, 2021</td>
-                                        <td>Contract</td>
-                                        <td>Paid</td>
-                                        <td> Reach First Inc.
-                                     
-                                        </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>UI/UX/Web Designer</td>
-                                        <td>Internship</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">AdobeXD</span>
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">Web Graphics</span>
-                                                </td>
-                                             </div>
-                        
-                                        <td>2 May, 2021</td>
-                                        <td>6 months</td>
-                                        <td>Paid</td>
-                                        <td> Vizz Web Solutions
-                                     
-                                        </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Web PHP Developer</td>
-                                        <td>Internship</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
-                                             </div>
-                        
-                                        <td>5 May, 2021</td>
-                                        <td>1 month</td>
-                                        <td>Paid</td>
-                                        <td> IntelliSol Inc.
-                                     
-                                        </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Back End Web Developer</td>
-                                        <td>Junior Developer</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">Python</span>
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
-                                             </div>
-                        
-                                        <td>28 Apr, 2021</td>
-                                        <td>3 months</td>
-                                        <td>Paid</td>
-                                        <td> Apparel Globe Inc.
-                                     
-                                        </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Web PHP Developer</td>
-                                        <td>Internship</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
-                                             </div>
-                        
-                                        <td>5 May, 2021</td>
-                                        <td>1 month</td>
-                                        <td>Paid</td>
-                                        <td> Al-Bari Group of Companies
-                                     
-                                        </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Asp.Net/DevOps Engineer</td>
-                                        <td>Internship</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">Microsoft SQL Sever</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">ASP.NET</span>
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">visual C</span>
-                                            </td>
-                                                
-                                            </div>
-                        
-                                        <td>5 May, 2021</td>
-                                        <td>1 month</td>
-                                        <td>Paid</td>
-                                        <td> Tekyard LLC
-                                     
-                                        </td>
-                                        <td><span style="text-decoration:underline; color: blue; cursor: pointer;">Click to view details</span></td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </td>
-                                    </tr>
-                                    
+                                    {% endfor %}
+                                
                                 </tbody>
                             </table>
                         </div>
