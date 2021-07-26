@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">      
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
+</head>
+
+<style>
+
+.dropbtn {
+  background-color: white;
+  color: black;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  margin: 0px 70px 0px 50px;
+}
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: white;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f5f9;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
+
+
+
+.sidebar-menu ul ul li a {
+  color: white;
+  padding-left: 25px;
+}
+
+.sidebar-menu ul ul li {
+   margin-bottom: 2%;
+   width: 200px
+}
+
+.sidebar-menu ul ul {
+display: none
+}
+
+.sidebar-menu li:hover > ul {
+        display: block;
+                
+}
+
+/* On mouse-over */
+.sidebar-menu li a:hover, .user-btn:hover {
+  text-decoration: underline;
+}
+
+
+.user-btn:hover + .hidden {
+  display: block;
+}
+
+.job-type-list
+{
+    font-size: 16px;
+    color: black;
+    background-color: white;
+    border-radius: 4px;
+    border:none;
+    height: 32px;
+    align-items: center;
+    box-shadow: thistle;
+    cursor: pointer;
+    
+}
+
+
+.job-date-list
+{
+    font-size: 16px;
+    color: black;
+    background-color:white;
+    box-shadow: thistle;
+    border-radius: 3px;
+    height: 32px;
+    border:none;
+    border-radius: 4px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.job-type-div
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    border: 2px solid black;
+    align-items:baseline;
+    border:none;
+    border-radius: 3px;
+    
+}
+
+.search-job-button
+{
+    font-size: 16px;
+    color: white;
+    background-color: rgb(68,129,235);
+    border-radius: 3px;
+    border:none;
+    
+    width: fit-content;
+    padding: 5px 5px;
+    align-content: center;
+    cursor: pointer;
+}
+
+
+.search-results-grid
+{
+ width: 100%;  
+ border: 2px  blue; 
+}
+
+</style>
+
+<body>
+    
+    <input type="checkbox" id="sidebar-toggle">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3 class="brand">
+                <span class="ti-unlink"></span> 
+                <span style="font-family: Quicksand, sans-serif; font-size: 12px;">Campus Career Portal</span>
+            </h3> 
+            <label for="sidebar-toggle" class="ti-menu-alt"></label>
+        </div>
+
+
+
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="/recruiter_dashboard">
+                        <span class="ti-home"></span>
+                        <span>Home</span>
+                    </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/view_student_applications" class="user-btn">
+                        <span class="ti-clipboard"></span>
+                        <span>Applications</span>
+                    </a>
+
+                </li>
+                <li>
+                    <a href="/calendar">
+                        <span class="ti-calendar"></span>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="user-btn">
+                        <span class="ti-id-badge"></span>
+                        <span>Jobs<span class="ti-arrow-down"></span></span>
+                    </a>
+
+                    <ul id="user-show">
+                        <li>
+                            <a href="/post_job">
+                                <span class="ti-pencil-alt"></span>
+                                <span class="text">Submit Job to CSO</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/view_all_jobs">
+                                <span class="ti-archive"></span>
+                                <span class="text">Your Jobs</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/view_active_jobs">
+                                <span class="ti-bolt-alt"></span>
+                                <span class="text">Active Jobs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="">
+                        <span class="ti-bar-chart-alt"></span>
+                        <span>Reports</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/search_students">
+                        <span class="ti-search"></span>
+                        <span>Search Students</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="">
+                        <span class="ti-settings"></span>
+                        <span>Account Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    
+
+    
+    <div class="main-content">
+        
+        <header>
+            <div class="search-wrapper">
+                <span class="ti-search"></span>
+                <input type="search" placeholder="Search">
+            </div>
+
+            <div class="search-wrapper">
+
+            <div class="dropdown">
+                <button onclick="myFunction()" class="dropbtn">
+                    <i class="fa fa-user"></i>
+                </button>
+                <div id="myDropdown" class="dropdown-content">
+                  <a href="#home">Settings</a>
+                  <a href="/logout">Logout</a>
+                </div>
+              </div>
+            
+          </div>
+                    
+        </header>
+
+        <main>
+
+            <div class="job-type-div">
+
+                <form action="/action_page.php">
+                   
+                    <select class="job-date-list" name="job-date-list" id="jobs-dates" >
+                      <option value="disabled selected">Date Posted</option>
+                      <option value="last-24">Last 24 hours</option>
+                      <option value="last-3-days">Last 3 days</option>
+                      <option value="last-7-days">Last 7 days</option>
+                      <option value="last-14-days">Last 14 days</option>
+                      <option value="all">All</option>
+                    </select>
+                    
+
+                </form>
+                <form action="/action_page.php">
+                   
+                    <select class="job-type-list" name="job-type-list" id="jobs" >
+                      <option value="disabled selected">Job Type</option>
+                      <option value="internship">Internship</option>
+                      <option value="paid">Full Time</option>
+                      <option value="contract">Contract</option>
+                      <option value="all">All</option>
+                    </select>
+                    <br><br>
+
+                </form>
+
+                <form action="/action_page.php">
+                   
+                    <select class="job-date-list" name="job-date-list" id="jobs-dates" >
+                      <option value="disabled selected">Experience</option>
+                      <option value="last-24">Beginner</option>
+                      <option value="last-3-days">Intermediate</option>
+                      <option value="last-7-days">Professional</option>
+                      <option value="last-14-days">Any</option>
+                      
+                    </select>
+                    
+
+                </form>
+
+                <form action="/action_page.php">
+                   
+                    <select class="job-date-list" name="job-date-list" id="jobs-dates" >
+                      <option value="disabled selected">Location</option>
+                      <option value="last-24">Exact location only</option>
+                      <option value="last-24">Remote location</option>
+                      <option value="last-3-days">within 5 kilometers</option>
+                      <option value="last-7-days">within 10 kilometers</option>
+                      <option value="last-7-days">within 15 kilometers</option>
+                      <option value="last-7-days">within 25 kilometers</option>
+                      <option value="last-7-days">within 50 kilometers</option>
+                      <option value="last-14-days">All</option>
+                      
+                    </select>
+                    
+
+                </form>
+
+                <button class=search-job-button> Apply</button>
+
+                
+
+            </div>
+                        
+            <section class="recent">
+                <div class="search-results-grid">
+                    <div class="activity-card" style="height:95% !important">
+                        
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Job Posting</th>
+                                        <th>Position</th>
+                                        <th>Skills Required</th>
+                                        <th>Location</th>
+                                        <th>Job Status</th>
+                                        <th>User</th>
+                                        <th>Department</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for data, data1, status, user, student in posts %}
+                                    <tr>
+                                        <td>{{data['job_title']}}</td>
+                                        <td>{{data1}}</td>
+                                        <td>
+                                        <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
+                                            {% for i in data['skills'].replace('[','').replace(']','').replace('"','').split(",") %}
+                                            <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">{{i}}</span>
+                                            {% endfor %}
+                                        </td>
+                                        <td>{{data['location']}}</td>
+                                        <td>{{status}}</td>
+                                        <td>{{user.full_name}}</td>
+                                        <td>{{student.department}}</td>
+                                        </div>
+
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            
+        </main>
+        
+    </div>
+    
+</body>
+
+</html> 
+
+<script>
+    /* When the user clicks on the button, 
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+    
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
+</script>
