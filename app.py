@@ -45,7 +45,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
 app.config['SECRET_KEY'] = 'ccp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-from models import db, Recruiter, CSO, Student, Users, login_manager, Job_Post, Employment_Type, User_Roles
+from models import db, Recruiter, CSO, Student, Users, login_manager, Job_Post, Employment_Type, User_Roles, Job_Application
 from django.conf import settings
 
 settings.configure()
@@ -113,6 +113,24 @@ def view_student_jobs():
 
     return render_template("view_student_jobs.html", posts=zip(posts, e_type, c_info))
 
+@app.route('/view_applied_jobs')
+def view_applied_jobs():
+    posts = db.session.query(Job_Application).filter_by(user_id=session["user_id"]).all()
+    jobs = []
+    e_type = []
+    c_info = []
+    status = []
+    for app in posts:
+        job = db.session.query(Job_Post).filter_by(id=app.job_id).first()
+        jobs.append(job)
+        employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+        e_type.append(employment_type.description)
+        company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
+        c_info.append(company.company_name)
+        status.append(app.status)
+
+    return render_template("view_applied_jobs.html", posts=zip(jobs, e_type, c_info, status))
+
 @app.route('/view_all_jobs')
 def view_all_jobs():
     posts = db.session.query(Job_Post).filter_by(user_id=session["user_id"]).all()
@@ -152,7 +170,18 @@ def apply_for_job(job_id):
     employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
     company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
     return render_template("apply_for_job.html", data=job, employment_type=employment_type, company=company)
-    
+
+@app.route('/submit_application/<job_id>', methods = ['GET', 'POST'])
+def submit_application(job_id):
+    app = Job_Application(
+            user_id = session["user_id"], job_id=job_id, status="Application Submitted",
+            created_at = str(datetime.now()).split('.')[0])   
+
+    db.session.add(app)
+    db.session.commit()
+
+    return render_template("job_post_status.html", status_msg="Job Application Submitted!")    
+
 @app.route('/view_students')
 def view_students():
     students = db.session.query(Users).all()

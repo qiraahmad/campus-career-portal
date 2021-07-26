@@ -33,6 +33,23 @@ class Job_Post(db.Model, UserMixin):
         self.status = status
         self.message = message
 
+class Job_Application(db.Model, UserMixin):
+    
+    __tablename__ = 'Job_Application'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('Users.id'))
+    job_id = Column(Integer, ForeignKey('Job_Post.id'))
+    created_at = db.Column(db.String(200))
+    status = db.Column(db.String(200))
+
+    def __init__(self, user_id, job_id, created_at, status):
+        self.user_id = user_id
+        self.job_id = job_id
+        self.created_at = created_at
+        self.status = status
+
+
 class Users(db.Model, UserMixin):
     
     __tablename__ = 'Users'
