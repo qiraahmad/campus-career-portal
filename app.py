@@ -131,6 +131,27 @@ def view_applied_jobs():
 
     return render_template("view_applied_jobs.html", posts=zip(jobs, e_type, c_info, status))
 
+@app.route('/view_student_applications')
+def view_student_applications():
+    posts = db.session.query(Job_Application).all()
+    jobs = []
+    e_type = []
+    status = []
+    user = []
+    student = []
+    for app in posts:
+        job = db.session.query(Job_Post).filter_by(id=app.job_id).first()
+        jobs.append(job)
+        employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+        e_type.append(employment_type.description)
+        status.append(app.status)
+        u = db.session.query(Users).filter_by(id=app.user_id).first()
+        s = db.session.query(Student).filter_by(user_id=app.user_id).first()
+        user.append(u)
+        student.append(s)
+
+    return render_template("view_student_applications.html", posts=zip(jobs, e_type, status, user, student))
+
 @app.route('/view_all_jobs')
 def view_all_jobs():
     posts = db.session.query(Job_Post).filter_by(user_id=session["user_id"]).all()
