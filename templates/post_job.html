@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <title>Recruiter Dashboard</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    
-     
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
 </head>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -74,6 +75,7 @@
   padding-right: 30px;
   margin: 4px;
   font-size: 14px;
+  width: 200px;
 }
 
 #tags span.tag:hover {
@@ -157,6 +159,35 @@ input[type=text], select {
     justify-content: center;
 }
 
+h5 {
+    font-size: 15px !important;
+}
+
+span {
+    font-size: 12px !important;
+}
+
+.dash-title, h5, h3 {
+    font-weight: 900 !important;
+}
+
+[class^="ti-"]:before, [class*="ti-"]:before , h3 {
+	font-size: 13px !important;
+    margin-left: 2px !important;
+}
+
+[class="ti-star"] {
+    font-size: 22px !important;
+}
+
+.selectpicker, select {
+    font-size: 15px !important
+}
+
+.filter-option, option {
+    font-size: 15px !important;
+    height: 30px !important;
+}
 
 </style>
 
@@ -165,9 +196,9 @@ input[type=text], select {
     <input type="checkbox" id="sidebar-toggle">
     <div class="sidebar">
         <div class="sidebar-header">
-            <h3 class="brand">
+            <h3 class="brand" style="margin-top: -1px !important;">
                 <span class="ti-unlink"></span> 
-                <span style="font-family: Quicksand, sans-serif; font-size: 12px;">Campus Career Portal</span>
+                <span style="font-family: Quicksand, sans-serif; font-size: 12px; margin-top: -2px !important;">Campus Career Portal</span>
             </h3> 
             <label for="sidebar-toggle" class="ti-menu-alt"></label>
         </div>
@@ -563,7 +594,7 @@ input[type=text], select {
                             <span class="ti-write"></span>
                             <div>
                                 <h5>Job Description</h5>
-                                <input name="jd" id="jd" type="text" maxlength="3200" style="width: 400px; height:300px;"/>
+                                <textarea id="jd" name="jd" rows="14" cols="56" wrap="physical" id="description_text_area"></textarea>
                             </div>
                         </div>
 
@@ -573,8 +604,10 @@ input[type=text], select {
                                 <h5>Skills Required</h5>
 
                                 <div id="tags">
-                                    <input  class="form-control skill-input" id="skills"
+                                    <input  class="form-control skill-input" id="livebox"
                                     type="text" value="" placeholder="Add a skill" name="skills"/>
+                                    <br><br>
+                                    <p id = "datalist"></p>
                                 </div>
             
                             
@@ -634,12 +667,24 @@ jQuery(function($) {
 var skills = [];
 
 $('#tags input').on('focusout', function() {
-  //var txt = this.value.replace(/[^a-zA-Z0-9\+\-\.\#]/g, ''); // allowed characters list
-  var txt = this.value
-  if (txt) $(this).before('<span class="tag">' + txt + '</span>');
+  //var txt = this.value.replace(s/[^a-zA-Z0-9\+\-\.\#]/g, ''); // allowed characters list
+  //var txt = $('#skills_job').val()
+  var txt = $('#skills_job :selected').text();
+
+  if (txt) $('#skills_job').after('<span class="tag">' + txt + '</span>');
   skills.push(txt);
   console.log(skills); //final array of skills
   this.value = "";
+  $('#skills_job').on('change', function() {
+        var txt = $('#skills_job :selected').text();
+        $('#skills_job').after('<span class="tag">' + txt + '</span>');
+
+        //if (txt) $(this).before('<span class="tag">' + txt + '</span>');
+        skills.push(txt);
+        console.log(skills); //final array of skills
+        this.value = "";
+  });
+
 })
 
 $("form").on("submit", function(){
@@ -675,3 +720,31 @@ $('#tags input').on('keydown', function (e) {
 
     
 </script>
+
+
+
+<script>
+    $(document).ready(function(){
+        $("#livebox").on("input",function(e){
+            $("#datalist").empty();
+            $.ajax({
+                method:"post",
+                url:"/livesearch",
+                data:{text:$("#livebox").val()},
+                success:function(res){
+                    var data = "<select class='list-group' id='skills_job'>";
+                    $.each(res,function(index,value){
+                        data += "<option class='list-group-item list-group-item-action' value="+value+">"+value+"</option>";
+                    });
+                    data += "</select>";
+                    $("#datalist").html(data);
+                }
+            });
+        });
+    });
+</script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>

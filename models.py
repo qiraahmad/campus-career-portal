@@ -142,6 +142,53 @@ class User_Roles(db.Model, UserMixin):
     def __init__(self, description):
         self.description = description
 
+class Skills(db.Model, UserMixin):
+    
+    __tablename__ = 'Skills'
+
+    name =  db.Column(db.String(200), primary_key=True)
+    related_1 =  db.Column(db.String(200))
+    related_2 =  db.Column(db.String(200))
+    related_3 =  db.Column(db.String(200))
+    related_4 =  db.Column(db.String(200))
+    related_5 =  db.Column(db.String(200))
+    related_6 =  db.Column(db.String(200))
+    related_7 =  db.Column(db.String(200))
+    related_8 =  db.Column(db.String(200))
+    related_9 =  db.Column(db.String(200))
+    related_10 =  db.Column(db.String(200))
+
+    def __init__(self, name, related_1, related_2, related_3, related_4, related_5, related_6, related_7, related_8, related_9, related_10):
+        self.name = name
+        self.related_1 = related_1
+        self.related_2 = related_2
+        self.related_3 = related_3
+        self.related_4 = related_4
+        self.related_5 = related_5
+        self.related_6 = related_6
+        self.related_7 = related_7
+        self.related_8 = related_8
+        self.related_9 = related_9
+        self.related_10 = related_10
+
+class Course_Catalog(db.Model, UserMixin):
+    
+    __tablename__ = 'Course_Catalog'
+
+    course_code = db.Column(db.String(10), primary_key=True)
+    course_title = db.Column(db.String(200))
+    related_course = db.Column(db.String(10))
+    course_type = db.Column(db.String(20))
+    course_details = db.Column(db.String(2000))
+
+    def __init__(self, course_code, course_title, related_course, course_type, course_details):
+        self.course_code = course_code
+        self.course_title = course_title
+        self.related_course = related_course
+        self.course_type = course_type
+        self.course_details = course_details
+
+
 @login_manager.user_loader
 def user_loader(email):
     user = Users.query.filter_by(email=email).one_or_none()

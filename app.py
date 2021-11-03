@@ -1,6 +1,6 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from security import Hash
 from sqlalchemy import Column, Integer, String, Boolean
@@ -21,6 +21,7 @@ import io
 import pandas as pd
 import random, string
 from flask_mail import Mail, Message
+import psycopg2
 
 # Flask constructor takes the name of s
 # current module (__name__) as argument.
@@ -31,6 +32,11 @@ app.config['MAIL_USERNAME'] = 'qira.ahmad@gmail.com'
 app.config['MAIL_PASSWORD'] = 'datasstho123'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
+
+conn = psycopg2.connect(
+   database="campus_career_portal", user='postgres', password='123', host='127.0.0.1', port= '5432'
+)
+cursor = conn.cursor()
 
 POSTGRES = {
     'user': 'postgres',
@@ -45,7 +51,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
 app.config['SECRET_KEY'] = 'ccp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-from models import db, Recruiter, CSO, Student, Users, login_manager, Job_Post, Employment_Type, User_Roles, Job_Application
+from models import db, Recruiter, CSO, Student, Users, login_manager, Job_Post, Employment_Type, User_Roles, Job_Application, Skills, Course_Catalog
 from django.conf import settings
 
 settings.configure()
@@ -366,7 +372,7 @@ def post_job():
                         user_id = session['user_id'], location=data['city'],
                         job_title = data['job'], employment_type = 1,
                         skills = skills, job_description=data['jd'], status=False,
-                        created_at = str(datetime.now()).split('.')[0])
+                        created_at = str(datetime.now()).split('.')[0], message=None)
             db.session.add(job_post)
             db.session.commit()
         elif (data['job_type'] == 'Part-time'):
@@ -374,7 +380,7 @@ def post_job():
                         user_id = session['user_id'], location=data['city'],
                         job_title = data['job'], employment_type = 2,
                         skills = skills, job_description=data['jd'], status=False,
-                        created_at = str(datetime.now()).split('.')[0])
+                        created_at = str(datetime.now()).split('.')[0], message=None)
             db.session.add(job_post)
             db.session.commit()
         elif (data['job_type'] == 'Contract'):
@@ -382,7 +388,7 @@ def post_job():
                         user_id = session['user_id'], location=data['city'],
                         job_title = data['job'], employment_type = 3,
                         skills = skills, job_description=data['jd'], status=False,
-                        created_at = str(datetime.now()).split('.')[0])
+                        created_at = str(datetime.now()).split('.')[0], message=None)
             db.session.add(job_post)
             db.session.commit()
         else:
@@ -390,7 +396,7 @@ def post_job():
                         user_id = session['user_id'], location=data['city'],
                         job_title = data['job'], employment_type = 4,
                         skills = skills, job_description=data['jd'], status=False,
-                        created_at = str(datetime.now()).split('.')[0])
+                        created_at = str(datetime.now()).split('.')[0], message=None)
             db.session.add(job_post)
             db.session.commit()
 
@@ -398,8 +404,20 @@ def post_job():
         return render_template("post_job.html")
 
     else:
-        return render_template("post_job.html")
+        skills = db.session.query(Skills).all()
+        return render_template("post_job.html", skills=skills)
 
+@app.route("/livesearch",methods=["POST","GET"])
+def livesearch():
+    searchbox = request.form.get("text")
+    query = '''select name from public."Skills" where name LIKE '%{}%' '''.format(searchbox)
+    cursor.execute(query)
+    result = cursor.fetchall()
+    return jsonify(result)
+
+@app.route("/test",methods=["POST","GET"])
+def test():
+    return render_template("test.html")
 
 @app.route('/view_uploaded_students_CSO')
 def view_uploaded_students_CSO():
