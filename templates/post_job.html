@@ -172,7 +172,7 @@ span {
 }
 
 [class^="ti-"]:before, [class*="ti-"]:before , h3 {
-	font-size: 13px !important;
+	font-size: 17px !important;
     margin-left: 2px !important;
 }
 
@@ -307,7 +307,7 @@ span {
             <h2 class="dash-title">Post A Job</h2>
             
             <div class="activity-card" style="position:relative; height:95% !important;width:52% !important; align-self: center; margin-left: 25%;">
-                <h3 style="text-align: center;">Submit Job to CSO</h3>
+                <h3 style="text-align: center; font-size: 18px">Submit Job to CSO</h3>
 
                 <form action="{{ url_for('post_job') }}" role="form" style="margin-top:5%;">
                 
@@ -671,18 +671,25 @@ $('#tags input').on('focusout', function() {
   //var txt = $('#skills_job').val()
   var txt = $('#skills_job :selected').text();
 
-  if (txt) $('#skills_job').after('<span class="tag">' + txt + '</span>');
-  skills.push(txt);
-  console.log(skills); //final array of skills
-  this.value = "";
+  if (txt && txt != "Choose Here") {
+    $('#skills_job').after('<span class="tag">' + txt + '</span>');
+    skills.push(txt);
+    console.log(skills); //final array of skills
+    this.value = "";
+  }
+  
   $('#skills_job').on('change', function() {
         var txt = $('#skills_job :selected').text();
-        $('#skills_job').after('<span class="tag">' + txt + '</span>');
+        //console.log(txt);
+        if (txt && txt != "Choose Here") {
+            $('#skills_job').after('<span class="tag">' + txt + '</span>');
 
-        //if (txt) $(this).before('<span class="tag">' + txt + '</span>');
-        skills.push(txt);
-        console.log(skills); //final array of skills
-        this.value = "";
+            //if (txt) $(this).before('<span class="tag">' + txt + '</span>');
+            skills.push(txt);
+            console.log(skills); //final array of skills
+            this.value = "";
+       }
+
   });
 
 })
@@ -718,14 +725,7 @@ $('#tags input').on('keydown', function (e) {
       }
  });
 
-    
-</script>
-
-
-
-<script>
-    $(document).ready(function(){
-        $("#livebox").on("input",function(e){
+$("#livebox").on("input",function(e){
             $("#datalist").empty();
             $.ajax({
                 method:"post",
@@ -733,6 +733,7 @@ $('#tags input').on('keydown', function (e) {
                 data:{text:$("#livebox").val()},
                 success:function(res){
                     var data = "<select class='list-group' id='skills_job'>";
+                    data += "<option hidden selected>Choose Here</option>"
                     $.each(res,function(index,value){
                         data += "<option class='list-group-item list-group-item-action' value="+value+">"+value+"</option>";
                     });
@@ -741,7 +742,12 @@ $('#tags input').on('keydown', function (e) {
                 }
             });
         });
-    });
+</script>
+
+
+
+<script>
+
 </script>
 
 
