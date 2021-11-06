@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
 from flask_login import LoginManager, UserMixin
 from sqlalchemy.dialects.postgresql import JSONB
 
@@ -15,7 +15,7 @@ class Job_Post(db.Model, UserMixin):
     user_id = Column(Integer, ForeignKey('Users.id'))
     job_title = db.Column(db.String(300))
     employment_type = Column(Integer)
-    created_at = db.Column(db.String(200))
+    created_at = db.Column(DateTime)
     location = db.Column(db.String(100))
     job_description = db.Column(db.String(800))
     skills = db.Column(JSONB)
@@ -40,7 +40,7 @@ class Job_Application(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('Users.id'))
     job_id = Column(Integer, ForeignKey('Job_Post.id'))
-    created_at = db.Column(db.String(200))
+    created_at = db.Column(DateTime)
     status = db.Column(db.String(200))
 
     def __init__(self, user_id, job_id, created_at, status):
@@ -59,17 +59,19 @@ class Users(db.Model, UserMixin):
     role_id = Column(Integer)
     full_name = db.Column(db.String(300))
     password = db.Column(db.String(200))
-    created_at = db.Column(db.String(200))
+    created_at = db.Column(DateTime)
     contact_number = db.Column(db.String(15))
+    last_login_at = db.Column(DateTime)
 
 
-    def __init__(self, email, full_name, password, created_at, contact_number, role_id):
+    def __init__(self, email, full_name, password, created_at, contact_number, role_id, last_login_at):
         self.full_name = full_name
         self.email = email
         self.password = password
         self.created_at = created_at
         self.contact_number = contact_number
         self.role_id = role_id
+        self.last_login_at = last_login_at
 
 class Recruiter(db.Model, UserMixin):
     
@@ -79,7 +81,7 @@ class Recruiter(db.Model, UserMixin):
     recruiter_id = db.Column(db.Integer, primary_key=True)
     company_name = db.Column(db.String(200))
     job_posted = db.Column(db.Boolean, unique=False)
-    created_at = db.Column(db.String(200))
+    created_at = db.Column(DateTime)
 
 
     def __init__(self, user_id, created_at, company_name, job_posted):
@@ -95,7 +97,7 @@ class Student(db.Model, UserMixin):
 
     student_id = db.Column(db.Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('Users.id'))
-    created_at = db.Column(db.String(200))
+    created_at = db.Column(DateTime)
     department = db.Column(db.String(200))
     applied_to_job = db.Column(db.Boolean, unique=False)
 
@@ -114,7 +116,7 @@ class CSO(db.Model, UserMixin):
 
     cso_id = db.Column(db.Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('Users.id'))
-    created_at = db.Column(db.String(200))
+    created_at = db.Column(DateTime)
     campus_name = db.Column(db.String(200))
 
     def __init__(self, user_id, created_at, campus_name):

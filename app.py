@@ -487,6 +487,9 @@ def login():
             login_user(user)
             session['username'] = email
             session['user_id'] = user.id
+            user.last_login_at = datetime.now()
+            db.session.commit()
+
 
             if user.role_id == 1:
                 return redirect(url_for('recruiter_dashboard'))
