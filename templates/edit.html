@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block body %}
+  <div class="row">
+    <div class="col-md-4 offset-md-4">
+      <div class="card card-body">
+        <form action="/update/{{student.id}}" method="POST">
+          <div class="form-group">
+            <label>Update Course: {{update_course}}</label>
+          </div>
+          <div class="form-group">
+            <select name="grade_select" class="selectpicker form-control" required="true">
+                <option disabled selected value="">Update Grade in Course</option>    
+                {% for o in courses %}
+                <option value="{{ o.name }}">{{ o.name }}</option>
+                {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

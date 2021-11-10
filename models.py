@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
 from flask_login import LoginManager, UserMixin
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, FLOAT
 
 
 db = SQLAlchemy()
@@ -62,7 +62,7 @@ class Users(db.Model, UserMixin):
     created_at = db.Column(DateTime)
     contact_number = db.Column(db.String(15))
     last_login_at = db.Column(DateTime)
-
+    first_time_login = db.Column(Boolean)
 
     def __init__(self, email, full_name, password, created_at, contact_number, role_id, last_login_at):
         self.full_name = full_name
@@ -72,6 +72,7 @@ class Users(db.Model, UserMixin):
         self.contact_number = contact_number
         self.role_id = role_id
         self.last_login_at = last_login_at
+        self.first_time_login = first_time_login
 
 class Recruiter(db.Model, UserMixin):
     
@@ -177,19 +178,49 @@ class Course_Catalog(db.Model, UserMixin):
     
     __tablename__ = 'Course_Catalog'
 
-    course_code = db.Column(db.String(10), primary_key=True)
-    course_title = db.Column(db.String(200))
-    related_course = db.Column(db.String(10))
-    course_type = db.Column(db.String(20))
-    course_details = db.Column(db.String(2000))
+    id = db.Column(db.Integer, primary_key=True)
+    Course_Code = db.Column(db.String(10), primary_key=True)
+    Course_Title = db.Column(db.String(200))
+    Related_Course = db.Column(db.String(10))
+    Course_Type = db.Column(db.String(20))
+    Course_Details = db.Column(db.String(2000))
 
-    def __init__(self, course_code, course_title, related_course, course_type, course_details):
-        self.course_code = course_code
-        self.course_title = course_title
-        self.related_course = related_course
-        self.course_type = course_type
-        self.course_details = course_details
+    def __init__(self, Course_Code, Course_Title, Related_Course, Course_Type, Course_Details):
+        self.Course_Code = Course_Code
+        self.Course_Title = Course_Title
+        self.Related_Course = Related_Course
+        self.Course_Type = Course_Type
+        self.Course_Details = Course_Details
 
+
+class Grades(db.Model, UserMixin):
+    
+    __tablename__ = 'Grades'
+
+    id = db.Column(db.Integer, primary_key=True)
+    grade = db.Column(db.String(5))
+    points = db.Column(FLOAT(precision=10, decimal_return_scale=None))
+
+    def __init__(self, grade, points):
+        self.grade = grade
+        self.points = points
+
+
+class Student_Courses(db.Model, UserMixin):
+    
+    __tablename__ = 'Student_Courses'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('Users.id'))
+    course_id = Column(Integer, ForeignKey('Course_Catalog.id'))
+    grade_id = Column(Integer, ForeignKey('Grades.id'))
+    created_at = db.Column(DateTime)
+
+    def __init__(self, user_id, course_id, grade_id, created_at):
+        self.user_id = user_id
+        self.course_id = course_id
+        self.grade_id = grade_id
+        self.created_at = created_at
 
 @login_manager.user_loader
 def user_loader(email):

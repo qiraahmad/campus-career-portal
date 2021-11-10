@@ -1,6 +1,6 @@
 # Importing flask module in the project is mandatory
 # An object of Flask class is our WSGI application.
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
 from security import Hash
 from sqlalchemy import Column, Integer, String, Boolean
@@ -51,7 +51,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
 app.config['SECRET_KEY'] = 'ccp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-from models import db, Recruiter, CSO, Student, Users, login_manager, Job_Post, Employment_Type, User_Roles, Job_Application, Skills, Course_Catalog
+from models import *
 from django.conf import settings
 
 settings.configure()
@@ -410,14 +410,41 @@ def post_job():
 @app.route("/livesearch",methods=["POST","GET"])
 def livesearch():
     searchbox = request.form.get("text")
-    query = '''select name from public."Skills" where name LIKE '%{}%' '''.format(searchbox)
+    query = '''select name from public."Skills" where name ILIKE '%{}%' '''.format(searchbox)
     cursor.execute(query)
     result = cursor.fetchall()
     return jsonify(result)
 
-@app.route("/test",methods=["POST","GET"])
-def test():
-    return render_template("test.html")
+@app.route("/course_catalog",methods=["POST","GET"])
+def course_catalog():
+    searchbox = request.form.get("text")
+    query = '''select "Course_Title" from public."Course_Catalog" where "Course_Title" ILIKE '%{}%' '''.format(searchbox)
+    cursor.execute(query)
+    result = cursor.fetchall()
+    return jsonify(result)
+
+@app.route("/add_courses",methods=["POST","GET"])
+def add_courses():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    s = '''
+        SELECT 
+            sc.id, u.full_name, cc."Course_Title", g.grade, date(sc.created_at) as created_at
+        FROM public."Student_Courses" sc
+        join public."Users" u on u.id = sc.user_id
+        join public."Course_Catalog" cc on cc.id = sc.course_id
+        join public."Grades" g on g.id = sc.grade_id '''
+    cur.execute(s) # Execute the SQL    
+    list_users = cur.fetchall()
+    query = '''select "Course_Title" as name from public."Course_Catalog" '''
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(query)
+    courses = cur.fetchall()
+    query = '''select "grade" as name from public."Grades" '''
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(query)
+    grades = cur.fetchall()
+    return render_template('add_courses.html', list_users = list_users, courses=courses, grades=grades, first_time_login=session['first_time_login'])
+
 
 @app.route('/view_uploaded_students_CSO')
 def view_uploaded_students_CSO():
@@ -486,6 +513,13 @@ def login():
         elif Hash.verify_password(user.password, password):
             login_user(user)
             session['username'] = email
+            if user.first_time_login == False:
+                session['first_time_login'] = True
+                user.first_time_login = True
+            else:
+                session['first_time_login'] = False
+                user.first_time_login = False
+
             session['user_id'] = user.id
             user.last_login_at = datetime.now()
             db.session.commit()
@@ -495,8 +529,10 @@ def login():
                 return redirect(url_for('recruiter_dashboard'))
             elif user.role_id == 3:
                 return redirect(url_for('cso_dashboard'))
-            else:
+            elif user.role_id == 2 and not session['first_time_login']:
                 return redirect(url_for('student_dashboard'))
+            else:
+                return redirect(url_for('add_courses'))
         else:    
             return render_template('sign_in.html', msg="Invalid password, try again", form1=login_form, form=register_form)
 
@@ -509,7 +545,64 @@ def logout():
     session['user_id']=False
     session.pop('username', None)
     return redirect(url_for('login'))
-    
+ 
+@app.route('/add_student_course', methods=['POST'])
+def add_student_course():
+    if request.method == 'POST':
+        course = request.form.get('course_select')
+        grade = request.form.get('grade_select')
+        grade = db.session.query(Grades).filter_by(grade=grade).first()
+        course = db.session.query(Course_Catalog).filter_by(Course_Title=course).first()
+        student_course = db.session.query(Student_Courses).filter_by(course_id=course.id, user_id=session["user_id"]).first()
+
+        if not student_course:
+            sc = Student_Courses(
+                user_id = session["user_id"], course_id=course.id, grade_id=grade.id,
+                created_at = datetime.now())   
+
+            db.session.add(sc)
+            db.session.commit()
+            flash('Student Added successfully')
+        else:
+            flash('Course Data Against Student Exists')
+
+        return redirect(url_for('add_courses'))
+ 
+@app.route('/edit/<id>', methods = ['POST', 'GET'])
+def get_student_course(id):   
+    data = db.session.query(Student_Courses).filter_by(id=id).first()
+    query = '''select "grade" as name from public."Grades" '''
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(query)
+    courses = cur.fetchall()
+    cur.close()
+
+    course = db.session.query(Course_Catalog).filter_by(id=data.id).first()
+    return render_template('edit.html', student = data, courses = courses, update_course=course.Course_Title)
+ 
+@app.route('/update/<id>', methods=['POST'])
+def update_student_course(id):
+    if request.method == 'POST':
+        grade = request.form.get('grade_select')
+        grade = db.session.query(Grades).filter_by(grade=grade).first()
+
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute("""
+            UPDATE public."Student_Courses"
+            SET grade_id = %s
+            WHERE id = %s
+        """, (grade.id, id))
+        flash('Student Updated Successfully')
+        conn.commit()
+        return redirect(url_for('add_courses'))
+ 
+@app.route('/delete/<string:id>', methods = ['POST','GET'])
+def delete_student(id):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute('DELETE FROM public."Student_Courses" WHERE id = {0}'.format(id))
+    conn.commit()
+    flash('Student Course Removed Successfully')
+    return redirect(url_for('add_courses'))
 
 # main driver function
 if __name__ == '__main__':
