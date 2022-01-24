@@ -71,7 +71,9 @@
     </div>
   </div>
 </div>
-  {% if first_time_login and list_users|length > 4 %}
+<br>
+<br>
+  {% if list_users|length >= 5 %}
   <div class="d-flex justify-content-center">
       <a href="{{ url_for('student_dashboard') }}" class="btn btn-primary btn-default">Move to Student Dashboard</a>
   </div>

@@ -61,8 +61,8 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.String(200))
     created_at = db.Column(DateTime)
     contact_number = db.Column(db.String(15))
-    last_login_at = db.Column(DateTime)
-    first_time_login = db.Column(Boolean)
+    last_login_at = db.Column(DateTime, nullable=True)
+    first_time_login = db.Column(Boolean, default=False)
 
     def __init__(self, email, full_name, password, created_at, contact_number, role_id, last_login_at):
         self.full_name = full_name
@@ -149,7 +149,8 @@ class Skills(db.Model, UserMixin):
     
     __tablename__ = 'Skills'
 
-    name =  db.Column(db.String(200), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    name =  db.Column(db.String(200))
     related_1 =  db.Column(db.String(200))
     related_2 =  db.Column(db.String(200))
     related_3 =  db.Column(db.String(200))
@@ -221,6 +222,22 @@ class Student_Courses(db.Model, UserMixin):
         self.course_id = course_id
         self.grade_id = grade_id
         self.created_at = created_at
+
+
+class Student_Skills(db.Model, UserMixin):
+    
+    __tablename__ = 'Student_Skills'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('Users.id'))
+    skill_id = Column(Integer, ForeignKey('Skills.id'))
+    created_at = db.Column(DateTime)
+
+    def __init__(self, user_id, skill_id, created_at):
+        self.user_id = user_id
+        self.skill_id = skill_id
+        self.created_at = created_at
+
 
 @login_manager.user_loader
 def user_loader(email):

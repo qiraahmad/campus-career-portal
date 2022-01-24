@@ -380,137 +380,26 @@ span.badge.success:active, span.badge.success:focus, span.badge.success:visited,
                                 <thead>
                                     <tr>
                                         <th>Student Name</th>
-                                        <th>Skills</th>
-                                        <th>Degree</th>
-                                        <th>Status</th>
-                                        <th>Contact</th>
+                                        <th>Department</th>
+                                        <th>Batch</th>
+                                        <th>View Job</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Andrew Simons</td>
+                                        {% for data in students %}
+                                        <td>{{data['full_name']}}</td>
+                                        <td>{{data['department']}}</td>
                                         <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
-                                             </div>
-                        
-                                        <td>Computer Science</td>
-                                        <td>Graduated</td>
+                                            {{data['batch']}}
+                                        </td>
                                         <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
+                                            <form action="{{url_for('view_student', student_id = data['user_id'])}}">
+                                            <button class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;" type="submit">View Student</button>
+                                            </form>
                                         </td>
-                                     
-                                        </td>
-
+                                        {% endfor %}
                                     </tr>
-                                    <tr>
-                                        <td>Fred Davis</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHPUnit</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">Unix/Linix/MVC</span></td>
-                                             </div>
-                                        <td>Computer Science</td>
-                                        <td>Undergrad </td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
-                                        </td>
-                                        
-                                        </td>
- 
-                                    </tr>
-                                    <tr>
-                                        <td>Adnan Jamshed</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS/Ajax</span></td>
-                                             </div>
-                        
-                                        <td>Computer Science</td>
-                                        <td>Graduated </td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
-                                        </td>
-                                    
-
-                                    </tr>
-                                    <tr>
-                                        <td>Kiran Khan</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">CakePHP</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">Ajax//JQuery/MySQL</span></td>
-                                             </div>
-                        
-                                        <td>Computer Science</td>
-                                        <td>Undergrad </td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
-                                        </td>
-                                     
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>Abdul Rehman</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP/PHPUnit</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/JavaScript</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">CSS</span>
-                                            </div>
-                                        </td>
-                        
-                                    <td>Computer Science</td>
-                                    <td>Graduated/Masters </td>
-                                    <td>
-                                        <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
-                                    </td>
-                                     
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>Naveed Shaahid</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP/CSS</span>
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">Web Graphics</span>
-                                                </td>
-                                             </div>
-                                        <td>Computer Science</td>
-                                        <td>Graduated/Masters </td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
-                                        </td>
-        
-                                     
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>Randy Miller</td>
-                                        <td>
-                                            <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                                <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">PHP</span>
-                                                <span class="badge success" style="cursor: pointer;padding: 5px 5px;margin: 5px 0px;">HTML/CSS</span></td>
-                                             </div>
-                                        <td>Computer Science</td>
-                                        <td>Graduated/Masters </td>
-                                        <td>
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">View Profile</span>
-                                        </td>
-                                    
-                                     
-                                        </td>
-
-                                    </tr>
-                                
-  
-                                    
                                 </tbody>
                             </table>
                         </div>
@@ -549,4 +438,3 @@ span.badge.success:active, span.badge.success:focus, span.badge.success:visited,
       }
     }
 </script>
-

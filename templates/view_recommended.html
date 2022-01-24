@@ -3,13 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-    <title>Student Dashboard</title>
+    <title>Recruiter Dashboard</title>
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">      <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">     
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
 </head>
 
 <style>
+
+
+.view-button
+{
+    font-size: 16px;
+    color: white;
+    background-color: rgb(68,129,235);
+    border-radius: 3px;
+    border:none;
+    
+    height: fit-content;
+    width: 220px;
+    margin-right: 5px;
+    margin-left: 5px;
+    padding: 6px 6px;
+    align-content: center;
+    cursor: pointer;
+}
 
 .dropbtn {
   background-color: white;
@@ -148,6 +167,7 @@ display: none
 
 <body>
     
+   
     <input type="checkbox" id="sidebar-toggle">
     <div class="sidebar">
         <div class="sidebar-header">
@@ -211,7 +231,7 @@ display: none
                 </li>
 
                 <li>
-                    <a href="">
+                    <a href="/student_search_job">
                         <span class="ti-search"></span>
                         <span>Search Jobs</span>
                     </a>
@@ -228,6 +248,7 @@ display: none
     </div>
     
     
+
     <div class="main-content">
         
         <header>
@@ -253,129 +274,54 @@ display: none
         </header>
         
         <main>
-
-            <div class="job-type-div">
-
-                <form action="/action_page.php">
-                   
-                    <select class="job-date-list" name="job-date-list" id="jobs-dates" >
-                      <option value="disabled selected">Date Posted</option>
-                      <option value="last-24">Last 24 hours</option>
-                      <option value="last-3-days">Last 3 days</option>
-                      <option value="last-7-days">Last 7 days</option>
-                      <option value="last-14-days">Last 14 days</option>
-                      <option value="all">All</option>
-                    </select>
-                    
-
-                </form>
-                <form action="/action_page.php">
-                   
-                    <select class="job-type-list" name="job-type-list" id="jobs" >
-                      <option value="disabled selected">Job Type</option>
-                      <option value="internship">Internship</option>
-                      <option value="paid">Full Time</option>
-                      <option value="contract">Contract</option>
-                      <option value="all">All</option>
-                    </select>
-                    <br><br>
-
-                </form>
-
-                <form action="/action_page.php">
-                   
-                    <select class="job-date-list" name="job-date-list" id="jobs-dates" >
-                      <option value="disabled selected">Experience</option>
-                      <option value="last-24">Beginner</option>
-                      <option value="last-3-days">Intermediate</option>
-                      <option value="last-7-days">Professional</option>
-                      <option value="last-14-days">Any</option>
-                      
-                    </select>
-                    
-
-                </form>
-
-                <form action="/action_page.php">
-                   
-                    <select class="job-date-list" name="job-date-list" id="jobs-dates" >
-                      <option value="disabled selected">Location</option>
-                      <option value="last-24">Exact location only</option>
-                      <option value="last-24">Remote location</option>
-                      <option value="last-3-days">within 5 kilometers</option>
-                      <option value="last-7-days">within 10 kilometers</option>
-                      <option value="last-7-days">within 15 kilometers</option>
-                      <option value="last-7-days">within 25 kilometers</option>
-                      <option value="last-7-days">within 50 kilometers</option>
-                      <option value="last-14-days">All</option>
-                      
-                    </select>
-                    
-
-                </form>
-
-                <button class=search-job-button> Apply</button>
-
-                
-
-            </div>
             
-            <h2 class="dash-title"> 10 jobs found for <span style="color: rgb(68,129,235);"> Web Development</span></h2>
-            
+            <h2 class="dash-title">Reccomended Candidates for Job:</h2>
+            <br><br>
+                        
             <section class="recent">
                 <div class="search-results-grid">
                     <div class="activity-card" style="height:95% !important">
-                        <h3>Search Results</h3>
                         
                         <div class="table-responsive">
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Job Posting</th>
-                                        <th>Position</th>
-                                        <th>Skills</th>
-                                        <th>Deadline</th>
-                                        <th>Duration</th>
-                                        <th>Paid</th>
-                                        <th>Company/Recruiter</th>
-                                        <th>Apply</th>
+                                        <th>Student Name</th>
+                                        <th>Contact Number</th>
+                                        <th>Email</th>
+                                        <th>Date Added</th>
+                                        <th>Department</th>
+                                        <th>Rank</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for data, data1, company in posts %}
+                                    {% set count = namespace(value=1) %}
+                                    {% for data, data1, data2 in posts %}
                                     <tr>
-                                        <td>{{data['job_title']}}</td>
-                                        <td>{{data1}}</td>
-                                        <td>
-                                        <div style="display: flex; flex-direction:inherit; flex-wrap: wrap;">
-                                            {% for i in data['skills'].replace('[','').replace(']','').replace('"','').split(",") %}
-                                            <span class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;">{{i}}</span>
-                                            {% endfor %}
-                                        </td>
-                                        <td>{{data1}}</td>
-                                        <td>{{data['location']}}</td>
-                                        <td>{{data1}}</td>
-                                        <td>{{company}}</td>
-                                        <td>
-
-                                        <a href="/view-job-details-student">
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </a>
-
-                                        </td>
-                                        </div>
-
+                                        <td>{{data.full_name}}</td>
+                                        <td>{{data.contact_number}}</td>
+                                        <td>{{data.email}}</td>
+                                        <td>{{data.created_at}}</td>
+                                        <td>{{data1.department}}</td>
+                                        <td>{{ count.value }}</td>
+                                    {% set count.value = count.value + 1 %}
                                     </tr>
                                     {% endfor %}
-                                
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
             
         </main>
         
     </div>
+
     
 </body>
 

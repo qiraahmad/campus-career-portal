@@ -662,14 +662,15 @@ span {
 
 <script>
 
-jQuery(function($) {
-
 var skills = [];
+
+jQuery(function($) {
 
 $('#tags input').on('focusout', function() {
   //var txt = this.value.replace(s/[^a-zA-Z0-9\+\-\.\#]/g, ''); // allowed characters list
   //var txt = $('#skills_job').val()
   var txt = $('#skills_job :selected').text();
+
 
   if (txt && txt != "Choose Here") {
     $('#skills_job').after('<span class="tag">' + txt + '</span>');
@@ -739,6 +740,11 @@ $("#livebox").on("input",function(e){
                     });
                     data += "</select>";
                     $("#datalist").html(data);
+
+                    for (var i = 0; i < skills.length; i++) {
+                        $('#skills_job').after('<span class="tag">' + skills[i] + '</span>');
+                        console.log("here", skills[i])
+                    }
                 }
             });
         });

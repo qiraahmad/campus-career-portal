@@ -11,22 +11,26 @@ conn = psycopg2.connect(
 cursor = conn.cursor()
 
 def map_courses():
-    textsample ="machine learning"  
-    textsample = textsample.lower()
     # convert to lowercase
-
-    sentences = nltk.sent_tokenize(textsample)  
-    words = nltk.word_tokenize(textsample)  
-    sentences = [w for w in words if w.isalpha()]
-    sentences.append(textsample)
-    query_args = str(sentences).replace('[','(').replace(']',')')
-    query_string = '''SELECT * from public."Skills" where name in {}'''.format(query_args)
-    print(query_string)
+    query_string = '''	SELECT lower(CONCAT(cc."Course_Title", ' ', cc."Course_Details")) as course
+	FROM public."Student_Courses" sc
+	join public."Grades" g on g.id = sc.grade_id
+	join Public."Course_Catalog" cc on sc.course_id = cc.id'''
 
     #Retrieving data
     cursor.execute(query_string)
     #Fetching 1st row from the table
     result = cursor.fetchall();
-    print(result)
+    res = list(map(' '.join, result))
+    textsample = ' '.join([str(elem) for elem in res])
+
+    query_string = '''SELECT name from public."Skills" where '{}' like CONCAT('%',lower(name),'%') '''.format(textsample)
+    
+    #Retrieving data
+    cursor.execute(query_string)
+    #Fetching 1st row from the table
+    result = cursor.fetchall();
+    res = [''.join(i) for i in result]
+    print(res)
 
 map_courses()

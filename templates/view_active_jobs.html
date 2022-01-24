@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-    <title>Student Dashboard</title>
+    <title>Recruiter Dashboard</title>
     <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">      <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">     
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
 </head>
 
 <style>
@@ -148,6 +149,7 @@ display: none
 
 <body>
     
+   
     <input type="checkbox" id="sidebar-toggle">
     <div class="sidebar">
         <div class="sidebar-header">
@@ -161,13 +163,20 @@ display: none
         <div class="sidebar-menu">
             <ul>
                 <li>
-                    <a href="">
+                    <a href="/recruiter_dashboard">
                         <span class="ti-home"></span>
                         <span>Home</span>
                     </span>
                     </a>
                 </li>
 
+                <li>
+                    <a href="/view_student_applications" class="user-btn">
+                        <span class="ti-clipboard"></span>
+                        <span>Applications</span>
+                    </a>
+
+                </li>
                 <li>
                     <a href="/calendar">
                         <span class="ti-calendar"></span>
@@ -182,25 +191,23 @@ display: none
 
                     <ul id="user-show">
                         <li>
-                            <a href="/view_applied_jobs">
-                                <span class="ti-archive"></span>
-                                <span class="text">Jobs Applied For</span>
+                            <a href="/post_job">
+                                <span class="ti-pencil-alt"></span>
+                                <span class="text">Submit Job to CSO</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/view_students_jobs">
+                            <a href="/view_all_jobs">
+                                <span class="ti-archive"></span>
+                                <span class="text">Your Jobs</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/view_active_jobs">
                                 <span class="ti-bolt-alt"></span>
                                 <span class="text">Active Jobs</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="/view_recommended_jobs">
-                                <span class="ti-bolt-alt"></span>
-                                <span class="text">Recommended Jobs</span>
-                            </a>
-                        </li>
-
-
                     </ul>
                 </li>
                 <li>
@@ -211,9 +218,9 @@ display: none
                 </li>
 
                 <li>
-                    <a href="">
+                    <a href="/search_students">
                         <span class="ti-search"></span>
-                        <span>Search Jobs</span>
+                        <span>Search Students</span>
                     </a>
                 </li>
 
@@ -233,7 +240,7 @@ display: none
         <header>
             <div class="search-wrapper">
                 <span class="ti-search"></span>
-                <input type="search" placeholder="Search">
+                <input id='myInput' onkeyup='searchTable()' type='text' placeholder="Search">
             </div>
 
             <div class="search-wrapper">
@@ -319,30 +326,29 @@ display: none
                 
 
             </div>
-            
-            <h2 class="dash-title"> 10 jobs found for <span style="color: rgb(68,129,235);"> Web Development</span></h2>
-            
+                        
             <section class="recent">
                 <div class="search-results-grid">
                     <div class="activity-card" style="height:95% !important">
-                        <h3>Search Results</h3>
                         
                         <div class="table-responsive">
-                            <table>
+                            <table id='myTable'>
                                 <thead>
                                     <tr>
                                         <th>Job Posting</th>
                                         <th>Position</th>
                                         <th>Skills</th>
                                         <th>Deadline</th>
-                                        <th>Duration</th>
-                                        <th>Paid</th>
+                                        <th>Location</th>
+                                        <th>Salary</th>
                                         <th>Company/Recruiter</th>
-                                        <th>Apply</th>
+                                        <th>View Job</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for data, data1, company in posts %}
+                                    <form action="{{url_for('view_applicants', job_id = data['id'])}}">
                                     <tr>
                                         <td>{{data['job_title']}}</td>
                                         <td>{{data1}}</td>
@@ -357,17 +363,22 @@ display: none
                                         <td>{{data1}}</td>
                                         <td>{{company}}</td>
                                         <td>
-
-                                        <a href="/view-job-details-student">
-                                            <span class="badge success" style="cursor: pointer; color:white;background-color: rgb(68,129,235);">Apply</span>
-                                        </a>
-
+                                            <button class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;" type="submit">View Candidates</button>
                                         </td>
+                                        {% if data['status'] != true %}
+                                        <td>
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </td>
+                                        {% else %}
+                                        <td>
+                                            <i class="fa fa-check-square" aria-hidden="true"></i>
+                                        </td>
+                                        {% endif %}
                                         </div>
 
                                     </tr>
+                                </form>
                                     {% endfor %}
-                                
                                 </tbody>
                             </table>
                         </div>
@@ -402,3 +413,27 @@ display: none
       }
     }
 </script>
+
+<script>
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    </script>

@@ -22,14 +22,16 @@ import pandas as pd
 import random, string
 from flask_mail import Mail, Message
 import psycopg2
+import numpy as np
+import ast
 
 # Flask constructor takes the name of s
 # current module (__name__) as argument.
 app = Flask(__name__)
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'qira.ahmad@gmail.com'
-app.config['MAIL_PASSWORD'] = 'datasstho123'
+app.config['MAIL_USERNAME'] = 'campuscareerportal@gmail.com'
+app.config['MAIL_PASSWORD'] = '123awesome'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
@@ -92,6 +94,26 @@ def student_dashboard():
 @app.route('/recruiter_dashboard')
 def recruiter_dashboard():
     return render_template("recruiter_dashboard.html")
+
+@app.route('/view_feedback/<job_id>', methods = ['GET', 'POST'])
+def view_feedback(job_id):
+    job = db.session.query(Job_Post).filter_by(id=job_id).first()
+    employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+    company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
+    return render_template("view_feedback.html", data=job, employment_type=employment_type, company=company)
+
+@app.route('/view_applicants/<job_id>', methods = ['GET', 'POST'])
+def view_applicants(job_id):
+    job_apps = db.session.query(Job_Application).filter_by(job_id=job_id).all()
+    info = []
+    students = []
+    for j in job_apps:
+        student_info = db.session.query(Student).filter_by(user_id=j.user_id).first()
+        if student_info is not None:
+            info.append(student_info)
+        students.append(db.session.query(Users).filter_by(id=j.user_id).first())
+
+    return render_template("view_applicants.html", posts=zip(students, info), j_id=job_id)
   
 @app.route('/student_search_job')
 def search_job_student_dashboard():
@@ -173,7 +195,7 @@ def view_all_jobs():
 
 @app.route('/view_submitted_jobs')
 def view_submitted_jobs():
-    posts = db.session.query(Job_Post).filter_by(status=False).all()
+    posts = db.session.query(Job_Post).all()
     e_type = []
     c_info = []
     for job in posts:
@@ -242,7 +264,7 @@ def view_active_jobs():
         company = db.session.query(Recruiter).filter_by(user_id=session["user_id"]).first()
         c_info.append(company.company_name)
 
-    return render_template("view_recruiter_jobs.html", posts=zip(posts, e_type, c_info))
+    return render_template("view_active_jobs.html", posts=zip(posts, e_type, c_info))
 
 @app.route('/view_approved_jobs')
 def view_approved_jobs():
@@ -294,8 +316,43 @@ def job_approval_response():
 
 @app.route('/search_students')
 def employer_search_students_response():
-    return render_template("search_students_filter.html")
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    s = '''
+        SELECT 
+            s."student_id" as user_id, u."full_name", s."department", concat('20', substring(u."email" from 2 for 2)) as batch
+        FROM public."Student" s
+        join public."Users" u on u.id = s.user_id '''
+    cur.execute(s) # Execute the SQL    
+    list_users = cur.fetchall()
+    cur.close
+    return render_template("search_students_filter.html", students=list_users)
     #return render_template("employer_search_students.html")
+
+@app.route('/view_student/<student_id>', methods = ['GET', 'POST'])
+def view_student(student_id):
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    s = '''
+        SELECT 
+            s."student_id" as user_id, u."full_name", s."department", concat('20', substring(u."email" from 2 for 2)) as batch
+        FROM public."Student" s
+        join public."Users" u on u.id = s.user_id
+        where s."student_id" = {} '''.format(student_id)
+    cur.execute(s) # Execute the SQL    
+    student = cur.fetchall()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    s = '''
+        SELECT 
+			c."Course_Title",
+			g.grade
+        FROM public."Student_Courses" sc
+        join public."Users" u on u.id = sc.user_id
+		join public."Student" s on s.user_id = sc.user_id
+		join public."Course_Catalog" c on c.id = sc.course_id
+		join public."Grades" g on g.id = sc.grade_id
+        where s."student_id" = {} '''.format(student_id)
+    cur.execute(s) # Execute the SQL   
+    course_info = cur.fetchall()
+    return render_template("view_student.html", data=student, course_info=course_info)
 
 @app.route('/apply_student_filter')
 def search_students_filter():
@@ -331,25 +388,27 @@ def upload_doc():
               if 'contact' in c or 'Contact' in c or 'phone' in c or 'Phone' in c:
                 contact_no = row[c]  
 
-            user = Users(
-                    email = email, full_name=name,
-                    password = Hash.hash_password(password),
-                    contact_number = contact_no, role_id=2,
-                    created_at = str(datetime.now()).split('.')[0])   
-            db.session.add(user)
-            db.session.commit()
-
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            s = '''
+               INSERT INTO public."Users"(
+	        email, role_id, full_name, password, created_at, contact_number)
+	        VALUES ('{}', 2, '{}', '{}', '{}', '{}') RETURNING id'''.format(email, name, Hash.hash_password(password), str(datetime.now()).split('.')[0], contact_no)
+            cur.execute(s) # Execute the SQL 
+            conn.commit()
+            user_id = cur.fetchall()
+            cur.close()
 
             student = Student(
-            user_id = user.id,
+            user_id = user_id[0][0],
             department = dept, applied_to_job=False,
             created_at = str(datetime.now()).split('.')[0])
             db.session.add(student)
             db.session.commit()
 
             msg = Message('Welcome to Campus Career Portal!', sender = 'qira.ahmad@gmail.com', recipients = [email])
-            msg.body = f' Hi { user.full_name }, Welcome to Campus Career Portal! Following are your account details: Email: {user.email} Password: {password}.'
+            msg.body = f' Hi { name }, Welcome to Campus Career Portal! Following are your account details: Email: {email} Password: {password}.'
             mail.send(msg)
+            print("Password", password)
 
     return render_template("upload_data_CSO.html", msg="Users have been registered")
 
@@ -426,13 +485,14 @@ def course_catalog():
 @app.route("/add_courses",methods=["POST","GET"])
 def add_courses():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    s = '''
+    s = ('''
         SELECT 
             sc.id, u.full_name, cc."Course_Title", g.grade, date(sc.created_at) as created_at
         FROM public."Student_Courses" sc
         join public."Users" u on u.id = sc.user_id
         join public."Course_Catalog" cc on cc.id = sc.course_id
-        join public."Grades" g on g.id = sc.grade_id '''
+        join public."Grades" g on g.id = sc.grade_id
+        where sc.user_id = {0} '''.format(session["user_id"]))
     cur.execute(s) # Execute the SQL    
     list_users = cur.fetchall()
     query = '''select "Course_Title" as name from public."Course_Catalog" '''
@@ -529,10 +589,12 @@ def login():
                 return redirect(url_for('recruiter_dashboard'))
             elif user.role_id == 3:
                 return redirect(url_for('cso_dashboard'))
-            elif user.role_id == 2 and not session['first_time_login']:
-                return redirect(url_for('student_dashboard'))
-            else:
-                return redirect(url_for('add_courses'))
+            elif user.role_id == 2:
+                data = db.session.query(Student_Courses).filter_by(user_id=user.id).all()
+                if len(data) >= 5:
+                    return redirect(url_for('student_dashboard'))
+                else:
+                    return redirect(url_for('add_courses'))
         else:    
             return render_template('sign_in.html', msg="Invalid password, try again", form1=login_form, form=register_form)
 
@@ -604,7 +666,251 @@ def delete_student(id):
     flash('Student Course Removed Successfully')
     return redirect(url_for('add_courses'))
 
-# main driver function
+def map_courses(user_id):
+    # convert to lowercase
+    query_string = ('''	SELECT lower(CONCAT(cc."Course_Title", ' ', cc."Course_Details")) as course
+	FROM public."Student_Courses" sc
+	join public."Grades" g on g.id = sc.grade_id
+	join Public."Course_Catalog" cc on sc.course_id = cc.id
+    WHERE sc.user_id = {0}'''.format(user_id))
+
+    #Retrieving data
+    cursor.execute(query_string)
+    #Fetching 1st row from the table
+    result = cursor.fetchall();
+    res = list(map(' '.join, result))
+    textsample = ' '.join([str(elem) for elem in res])
+
+    query_string = '''SELECT name from public."Skills" where '{}' like CONCAT('%',lower(name),'%') '''.format(textsample)
+    
+    #Retrieving data
+    cursor.execute(query_string)
+    #Fetching 1st row from the table
+    result = cursor.fetchall();
+    res = [''.join(i) for i in result]
+    return res
+
+
+@app.route('/view_recommended_jobs')
+def view_recommended_jobs():
+    cs_mapping_curr_user = map_courses(session["user_id"])
+    # print(cs_mapping_curr_user)
+    skills = []
+    jobs = []
+    students = []
+
+    query = '''	 select distinct user_id from public."Student"; '''
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(query)
+    st = cur.fetchall()
+    for st1 in st:
+            for st2 in st1:
+                students.append(st2)
+
+    query = '''	 select distinct id from public."Job_Post" where status = true; '''
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute(query)
+    j = cur.fetchall()
+    for j1 in j:
+        for j2 in j1:
+            jobs.append(j2)
+
+    # print(skills, students, jobs)
+    posts = db.session.query(Job_Post).filter_by(status=True).all()
+    for p in posts:
+        s = json.loads(p.skills)
+        for i in s:
+            skills.append(i)
+
+    student_dict = {}
+    scores = []
+    for s_id in students:
+        for j in skills:
+            cs_mapping = map_courses(s_id)
+            if j in cs_mapping:
+                scores.append(1)
+            else:
+                scores.append(0)
+        student_dict[s_id] = scores 
+        scores = []
+
+
+    # Create DataFrame  
+    df = pd.DataFrame(student_dict, index=None)
+    df = df.T
+    df.columns = skills  
+    df['user_id'] = students
+    # Print the output.  
+    print(df)   
+
+    #Build the user user similarity matrix based on thier skill vectors
+    #initialise a user user matrix uptill user count
+    sim=list()
+    for i in range(max(students)+1):
+            l=list()
+            l=[0]*(max(students)+1)
+            sim.append(l)
+
+    #Build  a dictionary of respondent id's as keys  and thier skills as values
+    m=(np.asscalar(np.int32(max(students))))
+    temp=[0]*m
+    vector=np.array(temp)
+    d=dict()
+    df = df[ ['user_id'] + [ col for col in df.columns if col != 'user_id' ] ]
+    for row in df.iterrows():
+        index,data=row
+        l=list()
+        #l=[data.values[0],list(data.values[1:])]
+        s=np.asscalar(np.int32(data.values[0]))
+        d[s]=np.array(list(data.values[1:]))
+        #print(type(data))
+
+    for key, value in d.items():
+            if(key< max(students)):
+                b=(np.linalg.norm(value))
+                for key2,value2 in d.items():
+                    if(key2< max(students)):
+                        # print(d[key],d[key2])
+                        a=np.dot(d[key],d[key2])
+                        ans=a/(np.linalg.norm(value2)*b)
+                        sim[key][key2] = ans
+                        #count2+=1
+        #count1+=1
+    rec_students = []
+    jp = []
+    for i in students:
+        if session["user_id"] != i and max(sim[i]) > 0:
+            rec_students.append(i)
+            print(i, max(sim[i]), sim[i].index( max(sim[i])))
+        # the similarity of user 1 with others 
+        #print((max(sim[1][2:])))
+        #print(sim[1].index(max(sim[1][2:])))
+        #user 1 is most similar to user 4653 with similarity 0.71 in skills
+
+    for i in rec_students:
+        job_apps = db.session.query(Job_Application).filter_by(user_id=i).all()
+        for j in job_apps:
+            jp.append(db.session.query(Job_Post).filter_by(status=True, id=j.job_id).first())
+    e_type = []
+    c_info = []
+    if jp:
+        for job in jp:
+            employment_type = db.session.query(Employment_Type).filter_by(employment_type_id=job.employment_type).first()
+            e_type.append(employment_type.description)
+            company = db.session.query(Recruiter).filter_by(user_id=job.user_id).first()
+            c_info.append(company.company_name)
+           
+
+    return render_template("view_student_jobs.html", posts=zip(jp, e_type, c_info))
+
+
+
+@app.route('/view_recommended_applicants/<job_id>', methods = ['POST', 'GET'])
+def view_recommended_applicants(job_id):
+    job_apps = db.session.query(Job_Application).filter_by(job_id=job_id).all()
+    for j in job_apps:
+        cs_mapping_curr_user = map_courses(j.user_id)
+        # print(cs_mapping_curr_user)
+        skills = []
+        jobs = []
+        students = []
+
+        query = '''	 select distinct s.user_id from public."Student" s join public."Job_Application" ja on ja.user_id = s.user_id; '''
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute(query)
+        st = cur.fetchall()
+        for st1 in st:
+                for st2 in st1:
+                    students.append(st2)
+
+        query = '''	 select distinct j.id from public."Job_Post" j join public."Job_Application" ja on ja.job_id = j.id where j.status = true; '''
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute(query)
+        j = cur.fetchall()
+        for j1 in j:
+            for j2 in j1:
+                jobs.append(j2)
+
+        # print(skills, students, jobs)
+        posts = db.session.query(Job_Post).filter_by(status=True).all()
+        for p in posts:
+            s = json.loads(p.skills)
+            for i in s:
+                skills.append(i)
+
+        student_dict = {}
+        scores = []
+        for s_id in students:
+            for j in skills:
+                cs_mapping = map_courses(s_id)
+                if j in cs_mapping:
+                    scores.append(1)
+                else:
+                    scores.append(0)
+            student_dict[s_id] = scores 
+            scores = []
+
+
+        # Create DataFrame  
+        df = pd.DataFrame(student_dict, index=None)
+        df = df.T
+        df['user_id'] = students
+        df.columns = ['user_id'] + skills  
+
+        job_skills = []
+        skill_scores = []
+        job_skill_dict = {}
+        query = '''select skills #>> '{}' as skills, id from public."Job_Post" j where j.status = true '''
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute(query)
+        j = cur.fetchall()
+        for i in j:
+            if int(i[1]) == int(job_id):
+                l = ast.literal_eval(i[0])
+                job_skills = [i.strip() for i in l]
+
+        for j in skills:
+            if j in job_skills:
+                skill_scores.append(1)
+            else:
+                skill_scores.append(0)
+        job_skill_dict[job_id] = skill_scores 
+
+        # Create DataFrame  
+        jdf = pd.DataFrame(job_skill_dict, index=None)
+        jdf = jdf.T
+        jdf['job_id'] = [job_id]
+        jdf.columns = ['job_id'] + skills  
+
+        info = []
+        students = []
+        score = []
+
+        # iterating over rows using iterrows() function
+        for i, j in jdf.loc[:, jdf.columns != 'job_id'].iterrows():
+            job = np.asarray(j.astype(np.bool))
+            for k, l in df.loc[:, df.columns != 'user_id'].iterrows():
+                student = np.asarray(l.astype(np.bool))
+                if job.shape != student.shape:
+                    raise ValueError("Shape mismatch: im1 and im2 must have the same shape.")
+
+                intersection = np.logical_and(job, student)
+
+                union = np.logical_or(job, student)
+
+                js = intersection.sum() / float(union.sum())
+
+                student_info = db.session.query(Student).filter_by(user_id=k).first()
+                if student_info is not None:
+                    info.append(student_info)
+                students.append(db.session.query(Users).filter_by(id=k).first())
+                score.append(js)
+
+        posts = sorted(zip(students, info, score), key = lambda x: x[2], reverse=True)
+        return render_template("view_recommended.html", posts=posts)
+
+
+    # main driver function
 if __name__ == '__main__':
 
     # run() method of Flask class runs the application 

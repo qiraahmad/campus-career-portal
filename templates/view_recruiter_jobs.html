@@ -240,7 +240,7 @@ display: none
         <header>
             <div class="search-wrapper">
                 <span class="ti-search"></span>
-                <input type="search" placeholder="Search">
+                <input id='myInput' onkeyup='searchTable()' type='text' placeholder="Search">
             </div>
 
             <div class="search-wrapper">
@@ -332,7 +332,7 @@ display: none
                     <div class="activity-card" style="height:95% !important">
                         
                         <div class="table-responsive">
-                            <table>
+                            <table id='myTable'>
                                 <thead>
                                     <tr>
                                         <th>Job Posting</th>
@@ -342,11 +342,13 @@ display: none
                                         <th>Location</th>
                                         <th>Salary</th>
                                         <th>Company/Recruiter</th>
+                                        <th>View Job</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for data, data1, company in posts %}
+                                    <form action="{{url_for('view_feedback', job_id = data['id'])}}">
                                     <tr>
                                         <td>{{data['job_title']}}</td>
                                         <td>{{data1}}</td>
@@ -360,6 +362,9 @@ display: none
                                         <td>{{data['location']}}</td>
                                         <td>{{data1}}</td>
                                         <td>{{company}}</td>
+                                        <td>
+                                            <button class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;" type="submit">View Job</button>
+                                        </td>
                                         {% if data['status'] != true %}
                                         <td>
                                             <i class="fa fa-times" aria-hidden="true"></i>
@@ -372,6 +377,7 @@ display: none
                                         </div>
 
                                     </tr>
+                                </form>
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -407,3 +413,27 @@ display: none
       }
     }
 </script>
+
+<script>
+    function searchTable() {
+        var input, filter, found, table, tr, td, i, j;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td.length; j++) {
+                if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                }
+            }
+            if (found) {
+                tr[i].style.display = "";
+                found = false;
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+    </script>
