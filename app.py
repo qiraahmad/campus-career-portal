@@ -815,7 +815,7 @@ def view_recommended_applicants(job_id):
         jobs = []
         students = []
 
-        query = '''	 select distinct s.user_id from public."Student" s join public."Job_Application" ja on ja.user_id = s.user_id; '''
+        query = '''	 select distinct s.user_id from public."Student" s join public."Job_Application" ja on ja.user_id = s.user_id where ja.job_id = {}; '''.format(job_id)
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(query)
         st = cur.fetchall()
@@ -823,7 +823,7 @@ def view_recommended_applicants(job_id):
                 for st2 in st1:
                     students.append(st2)
 
-        query = '''	 select distinct j.id from public."Job_Post" j join public."Job_Application" ja on ja.job_id = j.id where j.status = true; '''
+        query = '''	 select distinct j.id from public."Job_Post" j join public."Job_Application" ja on ja.job_id = j.id where j.status = true and j.id = {}; '''.format(job_id)
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute(query)
         j = cur.fetchall()
@@ -832,7 +832,7 @@ def view_recommended_applicants(job_id):
                 jobs.append(j2)
 
         # print(skills, students, jobs)
-        posts = db.session.query(Job_Post).filter_by(status=True).all()
+        posts = db.session.query(Job_Post).filter_by(status=True, id=job_id).all()
         for p in posts:
             s = json.loads(p.skills)
             for i in s:

@@ -292,6 +292,7 @@ display: none
                                         <th>Date Added</th>
                                         <th>Department</th>
                                         <th>Rank</th>
+                                        <th>View Student</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -304,6 +305,11 @@ display: none
                                         <td>{{data.created_at}}</td>
                                         <td>{{data1.department}}</td>
                                         <td>{{ count.value }}</td>
+                                        <td>
+                                            <form action="{{url_for('view_student', student_id = data1.student_id)}}">
+                                            <button class="badge success" style="cursor: pointer; padding: 5px 5px; margin: 5px 0px;" type="submit">View Student</button>
+                                            </form>
+                                        </td>
                                     {% set count.value = count.value + 1 %}
                                     </tr>
                                     {% endfor %}
